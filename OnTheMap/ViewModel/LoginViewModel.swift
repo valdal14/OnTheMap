@@ -23,8 +23,6 @@ class LoginViewModel: ObservableObject {
 	}
 	
 	func performUdacityLogin(username: String, password: String) {
-		print(username)
-		print(password)
 		Task {
 			try await Network.shared.login(username: username, password: password)
 		}

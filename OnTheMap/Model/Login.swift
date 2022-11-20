@@ -18,7 +18,7 @@ struct Udacity: Codable {
 
 struct LoginResponse: Codable {
 	let account: Account
-	let Session: Session
+	let session: Session
 }
 
 struct Account: Codable {

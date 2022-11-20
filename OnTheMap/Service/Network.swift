@@ -11,6 +11,11 @@ class Network {
 	
 	static let shared: Network = Network()
 	
+	struct Authentication {
+		static var accountKey = ""
+		static var sessionId = ""
+	}
+	
 	enum Endpoint {
 		static let udacityBaseURL = "https://onthemap-api.udacity.com/v1/"
 		
@@ -47,16 +52,15 @@ class Network {
 		
 		let (resposeData, response) = try await URLSession.shared.data(for: req)
 		print(response)
-		let res = response as! HTTPURLResponse
 		
+		let res = response as! HTTPURLResponse
 		if res.statusCode != 200 {
 			throw NetworkError.badRequest
 		} else {
 			let decodedData = try JSONDecoder().decode(LoginResponse.self, from: resposeData)
-			print(decodedData)
-			print(decodedData)
+			Authentication.accountKey = decodedData.account.key
+			Authentication.sessionId = decodedData.session.id
 		}
-		
 	}
 	
 }
