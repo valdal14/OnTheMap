@@ -8,53 +8,57 @@
 import SwiftUI
 
 struct LoginView: View {
-	@State private var email : String = "Email"
-	@State private var pwd: String = "Password"
-
-    var body: some View {
-        VStack {
-			VStack {
-				Image("UdacityLogo")
-					.resizable()
-					.aspectRatio(contentMode: .fit)
-					.frame(width: CGFloat(156), height: CGFloat(156), alignment: .center)
-				Text("Login with Udacity")
-					.fontWeight(.medium)
-					.padding(.top, 20)
-			}
-			.padding(10)
-			Form {
-				TextField("Email", text: $email)
-					.onTapGesture {
-						email = ""
+	@State private var email : String = ""
+	@State private var pwd: String = ""
+	@State private var isEmailValid: Bool = false
+	@State private var isValidaPWD: Bool = false
+	@ObservedObject private var loginVM: LoginViewModel = LoginViewModel()
+	
+	var body: some View {
+		VStack {
+			LoginHeader()
+			
+			TextField("Username", text: $email)
+				.padding()
+				.backgroundStyle(.gray)
+				.cornerRadius(5.0)
+				.padding(.bottom, 20)
+				.onChange(of: email) { email in
+					if loginVM.textFieldValidatorEmail(email) {
+						isEmailValid = true
+					} else {
+						isEmailValid = false
 					}
-				TextField("Password", text: $pwd)
-					.onTapGesture {
-						pwd = ""
-					}
-				Button("Login") {
-					print("i was pressed")
 				}
-				.frame(maxWidth: .infinity, alignment: .center)
-				.buttonStyle(.borderedProminent)
-				.buttonBorderShape(.roundedRectangle)
-				.tint(Color("UdacityColor"))
-				.foregroundColor(.white)
-				
-				Link("Don't have an account? Sign Up", destination: URL(string: "https://auth.udacity.com/sign-in")!)
-					.fontWeight(.light)
-					.tint(Color("UdacityColor"))
-					.frame(maxWidth: .infinity, alignment: .center)
+			SecureField("Password", text: $pwd)
+				.padding()
+				.cornerRadius(5.0)
+				.padding(.bottom, 20)
+				.onChange(of: pwd) { password in
+					if loginVM.textFieldValidatorPWD(password) {
+						isValidaPWD = true
+					} else {
+						isValidaPWD = false
+					}
+				}
+			
+			ButtonLoginView(btnText: "Login", isValidForm: (isEmailValid && isValidaPWD)) {
+				loginVM.performUdacityLogin(username: email, password: pwd)
 			}
-        }
-    }
+			
+			Spacer()
+			
+			LinkView(textMessage: "Don't have an account? Sign Up", destinationURL: "https://auth.udacity.com/sign-in")
+		}
+		.padding()
+	}
 }
 
 struct LoginViewDark_Previews: PreviewProvider {
-    static var previews: some View {
+	static var previews: some View {
 		LoginView()
 			.preferredColorScheme(.dark)
-    }
+	}
 }
 
 struct LoginViewLight_Previews: PreviewProvider {
