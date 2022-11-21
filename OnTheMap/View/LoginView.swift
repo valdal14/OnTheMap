@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct LoginView: View {
-	@State private var email : String = ""
-	@State private var pwd: String = ""
-	@State private var isEmailValid: Bool = false
-	@State private var isValidaPWD: Bool = false
-	@ObservedObject private var loginVM: LoginViewModel = LoginViewModel()
+	@State private var email = ""
+	@State private var pwd = ""
+	@State private var isEmailValid = false
+	@State private var isValidaPWD = false
+	@ObservedObject var loginVM  = LoginViewModel()
+	@State private var showLoginError = false
 	
 	var body: some View {
 		VStack {
@@ -44,6 +45,11 @@ struct LoginView: View {
 			
 			ButtonLoginView(btnText: "Login", isValidForm: (isEmailValid && isValidaPWD)) {
 				loginVM.performUdacityLogin(username: email, password: pwd)
+			}
+			.alert("Login Failed", isPresented: Binding<Bool>(
+				get: { loginVM.showLoginError }, set: {_ in })
+			) {
+				Button("Please try again", role: .cancel) { }
 			}
 			
 			Spacer()

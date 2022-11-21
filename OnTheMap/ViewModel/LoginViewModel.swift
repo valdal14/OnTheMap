@@ -7,7 +7,10 @@
 
 import Foundation
 
+@MainActor
 class LoginViewModel: ObservableObject {
+	
+	@Published private(set) var showLoginError = false
 	
 	func textFieldValidatorEmail(_ email: String) -> Bool {
 		if email.count > 100 {
@@ -24,7 +27,13 @@ class LoginViewModel: ObservableObject {
 	
 	func performUdacityLogin(username: String, password: String) {
 		Task {
-			try await Network.shared.login(username: username, password: password)
+			do {
+				try await Network.shared.login(username: username, password: password)
+				showLoginError = false
+			} catch let error as Network.NetworkError {
+				print("LOGIN FAILED: \(error)")
+				showLoginError = true
+			}
 		}
 	}
 }

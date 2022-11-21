@@ -51,15 +51,26 @@ class Network {
 		req.httpBody = try JSONEncoder().encode(data)
 		
 		let (resposeData, response) = try await URLSession.shared.data(for: req)
-		print(response)
 		
 		let res = response as! HTTPURLResponse
+		
 		if res.statusCode != 200 {
 			throw NetworkError.badRequest
 		} else {
-			let decodedData = try JSONDecoder().decode(LoginResponse.self, from: resposeData)
-			Authentication.accountKey = decodedData.account.key
-			Authentication.sessionId = decodedData.session.id
+			
+			// skip over the first 5 characters
+			let range = (5..<resposeData.count)
+			let newData = resposeData.subdata(in: range)
+			// ------------------------------->
+			
+			let decodedData = try? JSONDecoder().decode(LoginResponse.self, from: newData)
+			
+			if let decodedData = decodedData {
+				Authentication.accountKey = decodedData.account.key
+				Authentication.sessionId = decodedData.session.id
+			} else {
+				throw NetworkError.decodingError
+			}
 		}
 	}
 	
