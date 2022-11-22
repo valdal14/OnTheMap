@@ -17,6 +17,9 @@
 		015FFF6B29292B4500CF94B2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015FFF6A29292B4500CF94B2 /* LoginView.swift */; };
 		015FFF6D29292B4500CF94B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 015FFF6C29292B4500CF94B2 /* Assets.xcassets */; };
 		015FFF7029292B4500CF94B2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 015FFF6F29292B4500CF94B2 /* Preview Assets.xcassets */; };
+		01AE8E93292CB209005A5264 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE8E92292CB209005A5264 /* MainView.swift */; };
+		01AE8E95292CB29E005A5264 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE8E94292CB29E005A5264 /* MapView.swift */; };
+		01AE8E97292CB2F0005A5264 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE8E96292CB2F0005A5264 /* ListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +34,9 @@
 		015FFF6A29292B4500CF94B2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		015FFF6C29292B4500CF94B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		015FFF6F29292B4500CF94B2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		01AE8E92292CB209005A5264 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		01AE8E94292CB29E005A5264 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		01AE8E96292CB2F0005A5264 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,11 +86,32 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		01AE8E90292CB1C7005A5264 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				014DAB73292A7C73007D8D78 /* ButtonLoginView.swift */,
+				014DAB75292A7D1E007D8D78 /* LinkView.swift */,
+				014DAB7B292A88ED007D8D78 /* LoginHeader.swift */,
+				015FFF6A29292B4500CF94B2 /* LoginView.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		01AE8E91292CB1DD005A5264 /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				01AE8E92292CB209005A5264 /* MainView.swift */,
+				01AE8E94292CB29E005A5264 /* MapView.swift */,
+				01AE8E96292CB2F0005A5264 /* ListView.swift */,
+			);
+			path = MainView;
+			sourceTree = "<group>";
+		};
 		01F51EA329293256002EA31F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				01F51EA829293EDD002EA31F /* Helper */,
-				015FFF6A29292B4500CF94B2 /* LoginView.swift */,
+				01AE8E91292CB1DD005A5264 /* MainView */,
+				01AE8E90292CB1C7005A5264 /* Login */,
 				015FFF6829292B4500CF94B2 /* OnTheMapApp.swift */,
 				015FFF6C29292B4500CF94B2 /* Assets.xcassets */,
 			);
@@ -113,16 +140,6 @@
 				014DAB79292A80A9007D8D78 /* Network.swift */,
 			);
 			path = Service;
-			sourceTree = "<group>";
-		};
-		01F51EA829293EDD002EA31F /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				014DAB73292A7C73007D8D78 /* ButtonLoginView.swift */,
-				014DAB75292A7D1E007D8D78 /* LinkView.swift */,
-				014DAB7B292A88ED007D8D78 /* LoginHeader.swift */,
-			);
-			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,11 +213,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				015FFF6B29292B4500CF94B2 /* LoginView.swift in Sources */,
+				01AE8E93292CB209005A5264 /* MainView.swift in Sources */,
 				014DAB7C292A88ED007D8D78 /* LoginHeader.swift in Sources */,
 				014DAB78292A7EA1007D8D78 /* Login.swift in Sources */,
 				014DAB7A292A80A9007D8D78 /* Network.swift in Sources */,
 				014DAB7E292A8F78007D8D78 /* LoginViewModel.swift in Sources */,
 				015FFF6929292B4500CF94B2 /* OnTheMapApp.swift in Sources */,
+				01AE8E95292CB29E005A5264 /* MapView.swift in Sources */,
+				01AE8E97292CB2F0005A5264 /* ListView.swift in Sources */,
 				014DAB76292A7D1E007D8D78 /* LinkView.swift in Sources */,
 				014DAB74292A7C73007D8D78 /* ButtonLoginView.swift in Sources */,
 			);

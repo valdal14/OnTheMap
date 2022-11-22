@@ -11,6 +11,7 @@ import Foundation
 class LoginViewModel: ObservableObject {
 	
 	@Published private(set) var showLoginError = false
+	@Published private(set) var presentMainView = false
 	
 	func textFieldValidatorEmail(_ email: String) -> Bool {
 		if email.count > 100 {
@@ -30,6 +31,7 @@ class LoginViewModel: ObservableObject {
 			do {
 				try await Network.shared.login(username: username, password: password)
 				showLoginError = false
+				presentMainView = true
 			} catch let error as Network.NetworkError {
 				print("LOGIN FAILED: \(error)")
 				showLoginError = true

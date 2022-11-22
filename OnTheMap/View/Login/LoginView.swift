@@ -13,7 +13,6 @@ struct LoginView: View {
 	@State private var isEmailValid = false
 	@State private var isValidaPWD = false
 	@ObservedObject var loginVM  = LoginViewModel()
-	@State private var showLoginError = false
 	
 	var body: some View {
 		VStack {
@@ -46,6 +45,11 @@ struct LoginView: View {
 			ButtonLoginView(btnText: "Login", isValidForm: (isEmailValid && isValidaPWD)) {
 				loginVM.performUdacityLogin(username: email, password: pwd)
 			}
+			.fullScreenCover(isPresented: Binding<Bool>(
+				get: { loginVM.presentMainView }, set: {_ in }
+			), content: {
+				MainView()
+			})
 			.alert("Login Failed", isPresented: Binding<Bool>(
 				get: { loginVM.showLoginError }, set: {_ in })
 			) {
