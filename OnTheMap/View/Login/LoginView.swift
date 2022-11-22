@@ -53,7 +53,9 @@ struct LoginView: View {
 			.alert("Login Failed", isPresented: Binding<Bool>(
 				get: { loginVM.showLoginError }, set: {_ in })
 			) {
-				Button("Please try again", role: .cancel) { }
+				Button("Please try again", role: .cancel) {
+					loginVM.showLoginError = false
+				}
 			}
 			
 			Spacer()

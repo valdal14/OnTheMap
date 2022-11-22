@@ -10,7 +10,7 @@ import Foundation
 @MainActor
 class LoginViewModel: ObservableObject {
 	
-	@Published private(set) var showLoginError = false
+	@Published var showLoginError = false
 	@Published private(set) var presentMainView = false
 	
 	func textFieldValidatorEmail(_ email: String) -> Bool {
