@@ -8,24 +8,33 @@
 import SwiftUI
 
 struct MainView: View {
+	
+	@StateObject private var mapVM = MapViewModel()
+	@State private var loading = true
+	
 	var body: some View {
 		VStack {
 			HeaderView()
 			
 			NavigationStack {
-				TabView {
-					MapView()
-						.tabItem {
-							Label("Map", systemImage: "mappin.square.fill")
-						}
-					
-					ListView()
-						.tabItem {
-							Label("Map", systemImage: "list.bullet.rectangle.fill")
-						}
+				if mapVM.locationRequestCompled {
+					TabView {
+						MapView()
+							.tabItem {
+								Label("Map", systemImage: "mappin.square.fill")
+							}
+						
+						ListView()
+							.tabItem {
+								Label("Map", systemImage: "list.bullet.rectangle.fill")
+							}
+					}
+				} else {
+					ProgressView()
 				}
 			}
 		}
+		.onAppear { mapVM.getStudentLocations() }
 	}
 }
 

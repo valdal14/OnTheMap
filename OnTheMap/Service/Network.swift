@@ -20,10 +20,12 @@ class Network {
 		static let udacityBaseURL = "https://onthemap-api.udacity.com/v1/"
 		
 		case login
+		case studentLocations
 		
 		var stringValue: String {
 			switch self {
 				case .login: return Endpoint.udacityBaseURL + "session"
+				case .studentLocations: return Endpoint.udacityBaseURL + "StudentLocation?order=-updatedAt"
 			}
 		}
 		
@@ -68,6 +70,27 @@ class Network {
 			if let decodedData = decodedData {
 				Authentication.accountKey = decodedData.account.key
 				Authentication.sessionId = decodedData.session.id
+			} else {
+				throw NetworkError.decodingError
+			}
+		}
+	}
+	
+	func getStudentLocations() async throws -> [Student] {
+		guard let url = Endpoint.studentLocations.url else { throw NetworkError.badURL }
+		
+		let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
+		
+		let res = response as! HTTPURLResponse
+		
+		if res.statusCode != 200 {
+			throw NetworkError.badRequest
+		} else {
+			
+			let decodedData = try? JSONDecoder().decode(StudentInfo.self, from: data)
+			
+			if let decodedData = decodedData {
+				return decodedData.results
 			} else {
 				throw NetworkError.decodingError
 			}

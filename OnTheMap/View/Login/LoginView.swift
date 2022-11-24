@@ -12,7 +12,7 @@ struct LoginView: View {
 	@State private var pwd = ""
 	@State private var isEmailValid = false
 	@State private var isValidaPWD = false
-	@ObservedObject var loginVM  = LoginViewModel()
+	@StateObject var loginVM  = LoginViewModel()
 	
 	var body: some View {
 		VStack {
