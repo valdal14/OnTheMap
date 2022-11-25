@@ -8,12 +8,6 @@
 import Foundation
 import CoreLocation
 
-struct StudentLocation: Identifiable {
-	let id = UUID()
-	let name: String
-	let coordinate: CLLocationCoordinate2D
-}
-
 struct StudentInfo: Codable {
 	let results: [Student]
 }
@@ -28,7 +22,7 @@ struct Student : Codable {
 	let uniqueKey: String
 }
 
-struct StudentLocations: Identifiable {
+struct StudentLocation: Identifiable, Equatable {
 	let id = UUID()
 	let firstName: String
 	let lastName: String
@@ -36,4 +30,8 @@ struct StudentLocations: Identifiable {
 	let mediaURL: String
 	let uniqueKey: String
 	let coordinate: CLLocationCoordinate2D
+	
+	static func == (lhs: StudentLocation, rhs: StudentLocation) -> Bool {
+		return lhs.coordinate.longitude == rhs.coordinate.longitude && lhs.coordinate.longitude == rhs.coordinate.longitude
+	}
 }

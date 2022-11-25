@@ -19,13 +19,14 @@ struct MainView: View {
 			NavigationStack {
 				if mapVM.locationRequestCompled {
 					TabView {
-						MapView(locations: Binding<[StudentLocations]>(
+						MapView(locations: Binding<[StudentLocation]>(
 							get: { mapVM.studentLocations }, set: {_ in }))
 							.tabItem {
 								Label("Map", systemImage: "mappin.square.fill")
 							}
 						
-						ListView()
+						ListView(locations: Binding<[StudentLocation]>(
+							get: { mapVM.studentLocations }, set: {_ in }))
 							.tabItem {
 								Label("Map", systemImage: "list.bullet.rectangle.fill")
 							}

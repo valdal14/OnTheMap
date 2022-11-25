@@ -12,7 +12,7 @@ import CoreLocation
 public class MapViewModel: ObservableObject {
 	
 	private var studentInformation = [Student]()
-	@Published private(set) var studentLocations: [StudentLocations] = []
+	@Published private(set) var studentLocations: [StudentLocation] = []
 	@Published private(set) var showStudentError = false
 	@Published private(set) var locationRequestCompled = false
 	
@@ -30,11 +30,11 @@ public class MapViewModel: ObservableObject {
 	}
 	
 	//MARK: - Helper functions
-	private func parseStudentLocationResponse(studentsInfo: [Student]) -> [StudentLocations] {
-		var studentLocations: [StudentLocations] = []
+	private func parseStudentLocationResponse(studentsInfo: [Student]) -> [StudentLocation] {
+		var studentLocations: [StudentLocation] = []
 		
 		studentsInfo.forEach { student in
-			studentLocations.append(StudentLocations(firstName: student.firstName,
+			studentLocations.append(StudentLocation(firstName: student.firstName,
 													 lastName: student.firstName,
 													 mapString: student.mapString,
 													 mediaURL: student.mediaURL,
