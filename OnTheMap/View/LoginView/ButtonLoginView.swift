@@ -27,6 +27,6 @@ struct ButtonLoginView: View {
 
 struct ButtonLoginView_Previews: PreviewProvider {
     static var previews: some View {
-		ButtonLoginView(btnText: "Login", isValidForm: false, completion: { })
+		ButtonLoginView(btnText: "Login", isValidForm: true, completion: { })
     }
 }

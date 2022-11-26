@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct HeaderView: View {
+	
+	@State private var showingStudentView = false
+	
     var body: some View {
 		HStack {
 			Button {
-				print("I was pressed")
+				showingStudentView.toggle()
 			} label: {
 				Label("", systemImage: "mappin")
+			}.sheet(isPresented: $showingStudentView) {
+				StudentView()
 			}
 
 			Spacer()

@@ -19,27 +19,14 @@ struct LoginView: View {
 			LoginHeader()
 			
 			TextField("Username", text: $email)
-				.padding()
-				.backgroundStyle(.gray)
-				.cornerRadius(5.0)
-				.padding(.bottom, 20)
+				.onTheMapTextFieldModifier()
 				.onChange(of: email) { email in
-					if loginVM.textFieldValidatorEmail(email) {
-						isEmailValid = true
-					} else {
-						isEmailValid = false
-					}
+					isEmailValid = String.validateEmail(email)
 				}
 			SecureField("Password", text: $pwd)
-				.padding()
-				.cornerRadius(5.0)
-				.padding(.bottom, 20)
+				.onTheMapTextFieldModifier()
 				.onChange(of: pwd) { password in
-					if loginVM.textFieldValidatorPWD(password) {
-						isValidaPWD = true
-					} else {
-						isValidaPWD = false
-					}
+					isValidaPWD = String.validatePassword(password)
 				}
 			
 			ButtonLoginView(btnText: "Login", isValidForm: (isEmailValid && isValidaPWD)) {

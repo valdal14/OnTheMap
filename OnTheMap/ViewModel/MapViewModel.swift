@@ -19,7 +19,7 @@ public class MapViewModel: ObservableObject {
 	func getStudentLocations() {
 		Task {
 			do {
-				studentInformation = try await Network.shared.getStudentLocations()
+				studentInformation = try await Network.shared.getStudentLocation()
 				studentLocations = parseStudentLocationResponse(studentsInfo: studentInformation)
 				showStudentError = false
 			} catch let error as Network.NetworkError {

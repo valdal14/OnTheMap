@@ -20,12 +20,14 @@ class Network {
 		static let udacityBaseURL = "https://onthemap-api.udacity.com/v1/"
 		
 		case login
-		case studentLocations
+		case studentLocation
+		case addLocation
 		
 		var stringValue: String {
 			switch self {
 				case .login: return Endpoint.udacityBaseURL + "session"
-				case .studentLocations: return Endpoint.udacityBaseURL + "StudentLocation?order=-updatedAt"
+				case .studentLocation: return Endpoint.udacityBaseURL + "StudentLocation?order=-updatedAt"
+				case .addLocation: return Endpoint.udacityBaseURL + "StudentLocation"
 			}
 		}
 		
@@ -76,8 +78,8 @@ class Network {
 		}
 	}
 	
-	func getStudentLocations() async throws -> [Student] {
-		guard let url = Endpoint.studentLocations.url else { throw NetworkError.badURL }
+	func getStudentLocation() async throws -> [Student] {
+		guard let url = Endpoint.studentLocation.url else { throw NetworkError.badURL }
 		
 		let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
 		
@@ -91,6 +93,32 @@ class Network {
 			
 			if let decodedData = decodedData {
 				return decodedData.results
+			} else {
+				throw NetworkError.decodingError
+			}
+		}
+	}
+	
+	func postStudentLocation(firstName: String, lastName: String, latitude: Double, longitude: Double, mapString: String, mediaURL: String) async throws -> Bool {
+		guard let url = Endpoint.addLocation.url else { throw NetworkError.badURL }
+	
+		let studentToPost = Student(firstName: firstName, lastName: lastName, latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, uniqueKey: UUID().uuidString)
+		
+		var req = URLRequest(url: url)
+		req.addValue("application/json", forHTTPHeaderField: "Content-Type")
+		req.httpBody = try JSONEncoder().encode(studentToPost)
+		
+		let (data, response) = try await URLSession.shared.data(for: req)
+		print(response)
+		let res = response as! HTTPURLResponse
+		
+		if res.statusCode != 200 {
+			throw NetworkError.badRequest
+		} else {
+			let decodedData = try? JSONDecoder().decode(StudentResponse.self, from: data)
+			
+			if let _ = decodedData {
+				return true
 			} else {
 				throw NetworkError.decodingError
 			}

@@ -35,3 +35,8 @@ struct StudentLocation: Identifiable, Equatable {
 		return lhs.coordinate.longitude == rhs.coordinate.longitude && lhs.coordinate.longitude == rhs.coordinate.longitude
 	}
 }
+
+struct StudentResponse: Codable {
+	let createdAt: String
+	let objectId: String
+}
