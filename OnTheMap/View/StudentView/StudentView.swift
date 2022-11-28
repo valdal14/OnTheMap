@@ -11,8 +11,6 @@ import MapKit
 
 struct StudentView: View {
 	
-	lazy var geocoder = CLGeocoder()
-	
 	//MARK: Binding variables
 	@Environment(\.dismiss) var dismiss
 	@StateObject private var studentVM = StudentViewModel()
@@ -23,6 +21,10 @@ struct StudentView: View {
 	@State private var street = ""
 	@State private var url = ""
 	@State private var fullAddress = ""
+	@State private var presentMap = false
+	@State private var studentLocation: [StudentLocation] = []
+	@State private var latitude: Double = 0.0
+	@State private var longitude: Double = 0.0
 	
 	//MARK: - Validation States
 	@State private var isValidFirstName = false
@@ -31,11 +33,11 @@ struct StudentView: View {
 	@State private var isValidCity = false
 	@State private var isValidStreet = false
 	@State private var isValidUrl = false
-	
+	@State private var isValidForm = false
 	
 	//MARK: - View
 	
-    var body: some View {
+	var body: some View {
 		VStack {
 			if studentVM.wasCurrentUserAlreadyPosted {
 				HStack{}
@@ -48,18 +50,20 @@ struct StudentView: View {
 						}
 					}
 			} else {
-				VStack {
+				NavigationStack {
 					Form {
 						Section {
 							TextField("first name", text: $firstName)
 								.onTheMapTextFieldModifier()
 								.onChange(of: firstName) { firstName in
 									isValidFirstName = String.validateCommonFields(firstName)
+									isValidForm = validateForm()
 								}
 							TextField("last name", text: $lastName)
 								.onTheMapTextFieldModifier()
 								.onChange(of: lastName) { lastName in
 									isValidLastName = String.validateCommonFields(lastName)
+									isValidForm = validateForm()
 								}
 						} header: {
 							Text("Personal Information")
@@ -69,6 +73,7 @@ struct StudentView: View {
 								.onTheMapTextFieldModifier()
 								.onChange(of: url) { url in
 									isValidUrl = String.validateURL(url)
+									isValidForm = validateForm()
 								}
 						} header: {
 							Text("URL Information")
@@ -78,36 +83,75 @@ struct StudentView: View {
 								.onTheMapTextFieldModifier()
 								.onChange(of: country) { country in
 									isValidCountry = String.validateCommonFields(country)
+									isValidForm = validateForm()
 								}
 							TextField("city", text: $city)
 								.onTheMapTextFieldModifier()
 								.onChange(of: city) { city in
-									isValidCountry = String.validateCommonFields(city)
+									isValidCity = String.validateCommonFields(city)
+									isValidForm = validateForm()
 								}
 							TextField("street", text: $street)
 								.onTheMapTextFieldModifier()
 								.onChange(of: street) { street in
-									isValidCountry = String.validateCommonFields(street)
+									isValidStreet = String.validateCommonFields(street)
+									isValidForm = validateForm()
 								}
 						} header: {
 							Text("Location Information")
 						}
 					}
 					
-					ButtonLoginView(btnText: "Next", isValidForm: true) {
-						print("Next Screen")
+					ButtonLoginView(btnText: "Next", isValidForm: isValidForm) {
+						fullAddress = "\(country), \(city), \(street)"
+						let geocoder = CLGeocoder()
+						geocoder.geocodeAddressString(fullAddress) {placemarks, error in
+							if let error = error {
+								print(error)
+							} else {
+								var location: CLLocation?
+								
+								if let placemarks = placemarks, placemarks.count > 0 {
+									location = placemarks.first?.location
+								}
+								
+								if let location = location {
+									let coordinate = location.coordinate
+									latitude = coordinate.latitude
+									longitude = coordinate.longitude
+									
+									studentVM.addNewStudentLocation(firstName: firstName, lastName: lastName, latitude: coordinate.latitude, longitude: coordinate.longitude, country: country, city: city, street: street, mediaURL: url)
+									
+									presentMap = true
+									
+								} else {
+									print("No Matching Location Found")
+									presentMap = false
+								}
+							}
+						}
+					}
+					.sheet(isPresented: $presentMap) {
+						CurrentMapView(locations: Binding<[StudentLocation]>(
+							get: { studentVM.newStudent }, set: {_ in }
+						))
 					}
 				}
 			}
 		}
-    }
+	}
+	
+	//MARK: - Helper function
+	private func validateForm() -> Bool {
+		return isValidFirstName && isValidLastName && isValidCity && isValidCity && isValidStreet && isValidUrl
+	}
 }
 
 struct StudentViewDark_Previews: PreviewProvider {
-    static var previews: some View {
-        StudentView()
+	static var previews: some View {
+		StudentView()
 			.preferredColorScheme(.dark)
-    }
+	}
 }
 
 struct StudentViewLight_Previews: PreviewProvider {

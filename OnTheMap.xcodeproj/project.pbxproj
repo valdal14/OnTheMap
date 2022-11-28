@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		010CD60E2934A2FA0012F8DE /* CurrentMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010CD60D2934A2FA0012F8DE /* CurrentMapView.swift */; };
 		014DAB74292A7C73007D8D78 /* ButtonLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014DAB73292A7C73007D8D78 /* ButtonLoginView.swift */; };
 		014DAB76292A7D1E007D8D78 /* LinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014DAB75292A7D1E007D8D78 /* LinkView.swift */; };
 		014DAB78292A7EA1007D8D78 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014DAB77292A7EA1007D8D78 /* Login.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		010CD60D2934A2FA0012F8DE /* CurrentMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentMapView.swift; sourceTree = "<group>"; };
 		014DAB73292A7C73007D8D78 /* ButtonLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLoginView.swift; sourceTree = "<group>"; };
 		014DAB75292A7D1E007D8D78 /* LinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkView.swift; sourceTree = "<group>"; };
 		014DAB77292A7EA1007D8D78 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				01E606E82930AFCC0081FFE5 /* StudentView.swift */,
+				010CD60D2934A2FA0012F8DE /* CurrentMapView.swift */,
 			);
 			path = StudentView;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 				01AE8E93292CB209005A5264 /* MainView.swift in Sources */,
 				014DAB7C292A88ED007D8D78 /* LoginHeader.swift in Sources */,
 				01F231AB2931053B00BC2D27 /* StudentViewModel.swift in Sources */,
+				010CD60E2934A2FA0012F8DE /* CurrentMapView.swift in Sources */,
 				014DAB78292A7EA1007D8D78 /* Login.swift in Sources */,
 				014DAB7A292A80A9007D8D78 /* Network.swift in Sources */,
 				0184E0B0293213A90067A812 /* OnTheMap+Extension.swift in Sources */,

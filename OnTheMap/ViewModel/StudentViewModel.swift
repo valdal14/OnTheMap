@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SwiftUI
+import CoreLocation
 
 @MainActor
 class StudentViewModel: ObservableObject {
@@ -13,6 +15,8 @@ class StudentViewModel: ObservableObject {
 	let showOverrideLocationMessage = "You have already posted a student location. Woudl you like to override your current location?"
 	@Published var wasCurrentUserAlreadyPosted = false
 	@Published var showPostError = false
+	@Published var newStudent: [StudentLocation] = []
+	
 	
 	func postUserInformation(firstName: String, lastName: String, latitude: Double, longitude: Double, mapString: String, mediaURL: String){
 		Task {
@@ -30,4 +34,10 @@ class StudentViewModel: ObservableObject {
 			}
 		}
 	}
+	
+	func addNewStudentLocation(firstName: String, lastName: String, latitude: Double, longitude: Double, country: String, city: String, street: String, mediaURL: String) {
+		newStudent.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: "\(country), \(city), \(street)", mediaURL: mediaURL, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude)))
+	}
+
 }
+

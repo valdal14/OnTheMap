@@ -12,7 +12,7 @@ struct MapView: View {
 	
 	@Binding var locations : [StudentLocation]
 	
-	@State private var map = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 41.902782, longitude: 12.496366), span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
+	@State private var map = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 41.9139935, longitude: 12.4531818), span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
 	
     var body: some View {
 		Map(coordinateRegion: $map, annotationItems: locations) { location in
