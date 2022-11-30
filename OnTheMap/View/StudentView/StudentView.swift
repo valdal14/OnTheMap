@@ -95,8 +95,9 @@ struct StudentView: View {
 						Section("Selected Location") {
 							VStack {
 								CurrentMapView(locations: Binding<[StudentLocation]>(
-									get: { studentVM.newStudent }, set: {_ in }
-								))
+									get: { studentLocation }, set: {_ in }
+								), coordinate: Binding<CLLocationCoordinate2D>(
+								get: { CLLocationCoordinate2D(latitude: (studentLocation.last?.coordinate.latitude)!, longitude: (studentLocation.last?.coordinate.longitude)!) }, set: {_ in }))
 							}
 						}
 					}
@@ -106,6 +107,7 @@ struct StudentView: View {
 				HStack {
 					
 					SearchButtonView(systemImageName: "magnifyingglass", isValidForm: isValidForm) {
+						presentMap = false
 						fullAddress = "\(country), \(city), \(street)"
 						let geocoder = CLGeocoder()
 						geocoder.geocodeAddressString(fullAddress) {placemarks, error in
@@ -124,8 +126,9 @@ struct StudentView: View {
 									// check if already have a pin on these coordinates
 									let alreadyPostedLocation = studentVM.checkIfCurrentStudentAlreadyPostLocation(locations: studentLocation, latidute: coordinate.latitude, longitude: coordinate.longitude)
 									
-									studentVM.addNewStudentLocation(firstName: firstName, lastName: lastName, latitude: coordinate.latitude, longitude: coordinate.longitude, country: country, city: city, street: street, mediaURL: url)
 									
+									studentLocation.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
+								
 									if alreadyPostedLocation {
 										overrideMap = true
 									} else {
@@ -153,14 +156,13 @@ struct StudentView: View {
 		.alert(studentVM.showOverrideLocationMessage, isPresented: Binding<Bool>(
 			get: { studentVM.wasCurrentUserAlreadyPosted }, set: {_ in }
 		)) {
-			Button("Dismiss") {}
+			Button("Dismiss") {
+				studentVM.wasCurrentUserAlreadyPosted = false
+				studentLocation.removeLast()
+			}
 			Button("Override") {
 				print("Override Location")
-			}
-			.sheet(isPresented: $overrideMap) {
-				CurrentMapView(locations: Binding<[StudentLocation]>(
-					get: { studentVM.newStudent }, set: {_ in }
-				))
+				presentMap = true
 			}
 		}
 		
