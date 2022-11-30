@@ -24,6 +24,7 @@ struct StudentView: View {
 	@State private var presentMap = false
 	@State private var overrideMap = false
 	@State var studentLocation: [StudentLocation]
+	@State private var noLocationFound = false
 	
 	//MARK: - Validation States
 	@State private var isValidFirstName = false
@@ -111,8 +112,8 @@ struct StudentView: View {
 						fullAddress = "\(country), \(city), \(street)"
 						let geocoder = CLGeocoder()
 						geocoder.geocodeAddressString(fullAddress) {placemarks, error in
-							if let error = error {
-								print(error)
+							if let _ = error {
+								noLocationFound = true
 							} else {
 								var location: CLLocation?
 								
@@ -121,6 +122,7 @@ struct StudentView: View {
 								}
 								
 								if let location = location {
+									noLocationFound = false
 									let coordinate = location.coordinate
 									
 									// check if already have a pin on these coordinates
@@ -136,7 +138,7 @@ struct StudentView: View {
 									}
 									
 								} else {
-									print("No Matching Location Found")
+									noLocationFound = true
 									presentMap = false
 									overrideMap = false
 								}
@@ -151,6 +153,9 @@ struct StudentView: View {
 					}
 				}
 				.padding()
+			}
+			.alert("No location found", isPresented: $noLocationFound) {
+				Button("Dismiss") {}
 			}
 		}
 		.alert(studentVM.showOverrideLocationMessage, isPresented: Binding<Bool>(
