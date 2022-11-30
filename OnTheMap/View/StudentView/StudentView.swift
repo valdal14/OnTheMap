@@ -90,7 +90,7 @@ struct StudentView: View {
 						Text("Location Information")
 					}
 					
-					if presentMap {
+					if presentMap && isValidForm {
 						
 						Section("Selected Location") {
 							VStack {
@@ -146,7 +146,7 @@ struct StudentView: View {
 					
 					Spacer()
 					
-					SearchButtonView(systemImageName: "plus.circle.fill", isValidForm: presentMap) {
+					SearchButtonView(systemImageName: "plus.circle.fill", isValidForm: (presentMap && isValidForm)) {
 						print("submit map")
 					}
 				}
