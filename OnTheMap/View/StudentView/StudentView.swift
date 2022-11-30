@@ -149,10 +149,16 @@ struct StudentView: View {
 					Spacer()
 					
 					SearchButtonView(systemImageName: "plus.circle.fill", isValidForm: (presentMap && isValidForm)) {
-						print("submit map")
+						Task {
+							studentVM.postUserInformation(firstName: studentLocation.last!.firstName, lastName: studentLocation.last!.lastName, latitude: (studentLocation.last?.coordinate.latitude)!, longitude: (studentLocation.last?.coordinate.longitude)!, country: country, city: city, street: street, mediaURL: url)
+						}
 					}
 				}
 				.padding()
+				.alert("Error posting new location", isPresented: Binding<Bool>(
+				get: { studentVM.showPostError }, set: { _ in })) {
+					Button("Dismiss") {}
+				}
 			}
 			.alert("No location found", isPresented: $noLocationFound) {
 				Button("Dismiss") {}
