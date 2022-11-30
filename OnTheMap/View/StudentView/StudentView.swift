@@ -162,6 +162,7 @@ struct StudentView: View {
 			}
 			Button("Override") {
 				print("Override Location")
+				studentVM.wasCurrentUserAlreadyPosted = false
 				presentMap = true
 			}
 		}
