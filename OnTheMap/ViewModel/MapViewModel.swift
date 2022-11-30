@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import Combine
 
 @MainActor
 public class MapViewModel: ObservableObject {
@@ -19,11 +20,20 @@ public class MapViewModel: ObservableObject {
 	func getStudentLocations() {
 		Task {
 			do {
-				studentInformation = try await Network.shared.getStudentLocation()
+				let _ = try await Network.shared.getStudentLocation()
+					.publisher
+					.filter({ student in
+						!student.firstName.isEmpty && !student.lastName.isEmpty && validateMediaURL(urlString: student.mediaURL) != "invalid url"
+					})
+					.removeDuplicates(by: { $0.latitude == $1.latitude && $0.longitude == $0.longitude })
+					.sink(receiveValue: { student in
+						self.studentInformation.append(student)
+					})
+				
 				studentLocations = parseStudentLocationResponse(studentsInfo: studentInformation)
 				showStudentError = false
 			} catch let error as Network.NetworkError {
-				print(error)
+				print("Get Student location error: \(error.localizedDescription)")
 				showStudentError = true
 			}
 		}
@@ -44,5 +54,13 @@ public class MapViewModel: ObservableObject {
 		
 		locationRequestCompled = true
 		return studentLocations
+	}
+	
+	private func validateMediaURL(urlString: String) -> String {
+		if let url = URL(string: urlString) {
+			return url.absoluteString
+		} else {
+			return "invalid url"
+		}
 	}
 }

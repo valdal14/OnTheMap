@@ -9,12 +9,13 @@ import SwiftUI
 
 struct MainView: View {
 	
-	@StateObject private var mapVM = MapViewModel()
+	@StateObject var mapVM = MapViewModel()
 	@State private var loading = true
 	
 	var body: some View {
 		VStack {
-			HeaderView()
+			HeaderView(studentLocation: Binding<[StudentLocation]>(
+				get: { mapVM.studentLocations }, set: {_ in }))
 			
 			NavigationStack {
 				if mapVM.locationRequestCompled {

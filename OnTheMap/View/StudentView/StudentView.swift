@@ -22,9 +22,8 @@ struct StudentView: View {
 	@State private var url = ""
 	@State private var fullAddress = ""
 	@State private var presentMap = false
-	@State private var studentLocation: [StudentLocation] = []
-	@State private var latitude: Double = 0.0
-	@State private var longitude: Double = 0.0
+	@State private var overrideMap = false
+	@State var studentLocation: [StudentLocation]
 	
 	//MARK: - Validation States
 	@State private var isValidFirstName = false
@@ -38,71 +37,75 @@ struct StudentView: View {
 	//MARK: - View
 	
 	var body: some View {
-		VStack {
-			if studentVM.wasCurrentUserAlreadyPosted {
-				HStack{}
-					.alert(studentVM.showOverrideLocationMessage, isPresented: Binding<Bool>(
-						get: { studentVM.wasCurrentUserAlreadyPosted }, set: {_ in }
-					)) {
-						Button("Dismiss") {}
-						Button("Override") {
-							print("Override Location")
-						}
+		
+		HStack{
+			VStack {
+				Form {
+					Section {
+						TextField("first name", text: $firstName)
+							.onTheMapTextFieldModifier()
+							.onChange(of: firstName) { firstName in
+								isValidFirstName = String.validateCommonFields(firstName)
+								isValidForm = validateForm()
+							}
+						TextField("last name", text: $lastName)
+							.onTheMapTextFieldModifier()
+							.onChange(of: lastName) { lastName in
+								isValidLastName = String.validateCommonFields(lastName)
+								isValidForm = validateForm()
+							}
+					} header: {
+						Text("Personal Information")
 					}
-			} else {
-				NavigationStack {
-					Form {
-						Section {
-							TextField("first name", text: $firstName)
-								.onTheMapTextFieldModifier()
-								.onChange(of: firstName) { firstName in
-									isValidFirstName = String.validateCommonFields(firstName)
-									isValidForm = validateForm()
-								}
-							TextField("last name", text: $lastName)
-								.onTheMapTextFieldModifier()
-								.onChange(of: lastName) { lastName in
-									isValidLastName = String.validateCommonFields(lastName)
-									isValidForm = validateForm()
-								}
-						} header: {
-							Text("Personal Information")
-						}
-						Section {
-							TextField("personal url", text: $url)
-								.onTheMapTextFieldModifier()
-								.onChange(of: url) { url in
-									isValidUrl = String.validateURL(url)
-									isValidForm = validateForm()
-								}
-						} header: {
-							Text("URL Information")
-						}
-						Section {
-							TextField("country", text: $country)
-								.onTheMapTextFieldModifier()
-								.onChange(of: country) { country in
-									isValidCountry = String.validateCommonFields(country)
-									isValidForm = validateForm()
-								}
-							TextField("city", text: $city)
-								.onTheMapTextFieldModifier()
-								.onChange(of: city) { city in
-									isValidCity = String.validateCommonFields(city)
-									isValidForm = validateForm()
-								}
-							TextField("street", text: $street)
-								.onTheMapTextFieldModifier()
-								.onChange(of: street) { street in
-									isValidStreet = String.validateCommonFields(street)
-									isValidForm = validateForm()
-								}
-						} header: {
-							Text("Location Information")
+					Section {
+						TextField("personal url", text: $url)
+							.onTheMapTextFieldModifier()
+							.onChange(of: url) { url in
+								isValidUrl = String.validateURL(url)
+								isValidForm = validateForm()
+							}
+					} header: {
+						Text("URL Information")
+					}
+					Section {
+						TextField("country", text: $country)
+							.onTheMapTextFieldModifier()
+							.onChange(of: country) { country in
+								isValidCountry = String.validateCommonFields(country)
+								isValidForm = validateForm()
+							}
+						TextField("city", text: $city)
+							.onTheMapTextFieldModifier()
+							.onChange(of: city) { city in
+								isValidCity = String.validateCommonFields(city)
+								isValidForm = validateForm()
+							}
+						TextField("street", text: $street)
+							.onTheMapTextFieldModifier()
+							.onChange(of: street) { street in
+								isValidStreet = String.validateCommonFields(street)
+								isValidForm = validateForm()
+							}
+					} header: {
+						Text("Location Information")
+					}
+					
+					if presentMap {
+						
+						Section("Selected Location") {
+							VStack {
+								CurrentMapView(locations: Binding<[StudentLocation]>(
+									get: { studentVM.newStudent }, set: {_ in }
+								))
+							}
 						}
 					}
 					
-					ButtonLoginView(btnText: "Next", isValidForm: isValidForm) {
+				}
+				
+				HStack {
+					
+					SearchButtonView(systemImageName: "magnifyingglass", isValidForm: isValidForm) {
 						fullAddress = "\(country), \(city), \(street)"
 						let geocoder = CLGeocoder()
 						geocoder.geocodeAddressString(fullAddress) {placemarks, error in
@@ -117,28 +120,50 @@ struct StudentView: View {
 								
 								if let location = location {
 									let coordinate = location.coordinate
-									latitude = coordinate.latitude
-									longitude = coordinate.longitude
+									
+									// check if already have a pin on these coordinates
+									let alreadyPostedLocation = studentVM.checkIfCurrentStudentAlreadyPostLocation(locations: studentLocation, latidute: coordinate.latitude, longitude: coordinate.longitude)
 									
 									studentVM.addNewStudentLocation(firstName: firstName, lastName: lastName, latitude: coordinate.latitude, longitude: coordinate.longitude, country: country, city: city, street: street, mediaURL: url)
 									
-									presentMap = true
+									if alreadyPostedLocation {
+										overrideMap = true
+									} else {
+										presentMap = true
+									}
 									
 								} else {
 									print("No Matching Location Found")
 									presentMap = false
+									overrideMap = false
 								}
 							}
 						}
 					}
-					.sheet(isPresented: $presentMap) {
-						CurrentMapView(locations: Binding<[StudentLocation]>(
-							get: { studentVM.newStudent }, set: {_ in }
-						))
+					
+					Spacer()
+					
+					SearchButtonView(systemImageName: "plus.circle.fill", isValidForm: presentMap) {
+						print("submit map")
 					}
 				}
+				.padding()
 			}
 		}
+		.alert(studentVM.showOverrideLocationMessage, isPresented: Binding<Bool>(
+			get: { studentVM.wasCurrentUserAlreadyPosted }, set: {_ in }
+		)) {
+			Button("Dismiss") {}
+			Button("Override") {
+				print("Override Location")
+			}
+			.sheet(isPresented: $overrideMap) {
+				CurrentMapView(locations: Binding<[StudentLocation]>(
+					get: { studentVM.newStudent }, set: {_ in }
+				))
+			}
+		}
+		
 	}
 	
 	//MARK: - Helper function
@@ -149,14 +174,14 @@ struct StudentView: View {
 
 struct StudentViewDark_Previews: PreviewProvider {
 	static var previews: some View {
-		StudentView()
+		StudentView(studentLocation: MainView().mapVM.studentLocations)
 			.preferredColorScheme(.dark)
 	}
 }
 
 struct StudentViewLight_Previews: PreviewProvider {
 	static var previews: some View {
-		StudentView()
+		StudentView(studentLocation: MainView().mapVM.studentLocations)
 			.preferredColorScheme(.light)
 	}
 }

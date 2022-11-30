@@ -39,6 +39,7 @@ class Network {
 		case badURL
 		case badRequest
 		case decodingError
+		case userAlreadyPostLocation
 	}
 	
 	
@@ -105,6 +106,7 @@ class Network {
 		let studentToPost = Student(firstName: firstName, lastName: lastName, latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, uniqueKey: UUID().uuidString)
 		
 		var req = URLRequest(url: url)
+		req.httpMethod = "POST"
 		req.addValue("application/json", forHTTPHeaderField: "Content-Type")
 		req.httpBody = try JSONEncoder().encode(studentToPost)
 		

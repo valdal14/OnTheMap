@@ -18,21 +18,8 @@ struct CurrentMapView: View {
 		ZStack {
 			Map(coordinateRegion: $map, annotationItems: locations) { currentLocation in
 				MapMarker(coordinate: currentLocation.coordinate)
-			}.ignoresSafeArea()
-		}
-		.overlay(alignment: .bottom) {
-			HStack {
-				ButtonLoginView(btnText: "Cancel", isValidForm: true) {
-					dismiss()
-				}
-				
-				Spacer()
-				
-				ButtonLoginView(btnText: "Submit", isValidForm: true) {
-					print("PostaData")
-				}
 			}
-			.padding()
+			.frame(height: 300, alignment: .center)
 		}
 	}
 }
