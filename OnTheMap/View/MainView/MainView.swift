@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct MainView: View {
 	
@@ -21,7 +22,8 @@ struct MainView: View {
 				if mapVM.locationRequestCompled {
 					TabView {
 						MapView(locations: Binding<[StudentLocation]>(
-							get: { mapVM.studentLocations }, set: {_ in }))
+							get: { mapVM.studentLocations }, set: {_ in }), coordinate: Binding<CLLocationCoordinate2D>(
+								get: { CLLocationCoordinate2D(latitude: (mapVM.studentLocations.last?.coordinate.latitude)!, longitude: (mapVM.studentLocations.last?.coordinate.longitude)!)}, set: { _ in }))
 							.tabItem {
 								Label("Map", systemImage: "mappin.square.fill")
 							}

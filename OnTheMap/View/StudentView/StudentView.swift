@@ -108,42 +108,7 @@ struct StudentView: View {
 				HStack {
 					
 					SearchButtonView(systemImageName: "magnifyingglass", isValidForm: isValidForm) {
-						presentMap = false
-						fullAddress = "\(country), \(city), \(street)"
-						let geocoder = CLGeocoder()
-						geocoder.geocodeAddressString(fullAddress) {placemarks, error in
-							if let _ = error {
-								noLocationFound = true
-							} else {
-								var location: CLLocation?
-								
-								if let placemarks = placemarks, placemarks.count > 0 {
-									location = placemarks.first?.location
-								}
-								
-								if let location = location {
-									noLocationFound = false
-									let coordinate = location.coordinate
-									
-									// check if already have a pin on these coordinates
-									let alreadyPostedLocation = studentVM.checkIfCurrentStudentAlreadyPostLocation(locations: studentLocation, latidute: coordinate.latitude, longitude: coordinate.longitude)
-									
-									
-									studentLocation.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
-								
-									if alreadyPostedLocation {
-										overrideMap = true
-									} else {
-										presentMap = true
-									}
-									
-								} else {
-									noLocationFound = true
-									presentMap = false
-									overrideMap = false
-								}
-							}
-						}
+						storeNewLocation(override: State<Bool>(initialValue: overrideMap))
 					}
 					
 					Spacer()
@@ -152,6 +117,7 @@ struct StudentView: View {
 						Task {
 							studentVM.postUserInformation(firstName: studentLocation.last!.firstName, lastName: studentLocation.last!.lastName, latitude: (studentLocation.last?.coordinate.latitude)!, longitude: (studentLocation.last?.coordinate.longitude)!, country: country, city: city, street: street, mediaURL: url)
 						}
+						
 					}
 				}
 				.padding()
@@ -164,25 +130,72 @@ struct StudentView: View {
 				Button("Dismiss") {}
 			}
 		}
-		.alert(studentVM.showOverrideLocationMessage, isPresented: Binding<Bool>(
-			get: { studentVM.wasCurrentUserAlreadyPosted }, set: {_ in }
-		)) {
+		.alert(studentVM.showOverrideLocationMessage, isPresented: $overrideMap) {
 			Button("Dismiss") {
-				studentVM.wasCurrentUserAlreadyPosted = false
+				overrideMap = false
 				studentLocation.removeLast()
 			}
 			Button("Override") {
 				print("Override Location")
-				studentVM.wasCurrentUserAlreadyPosted = false
+				storeNewLocation(override: State<Bool>(initialValue: overrideMap))
 				presentMap = true
+				
 			}
 		}
-		
 	}
 	
 	//MARK: - Helper function
 	private func validateForm() -> Bool {
 		return isValidFirstName && isValidLastName && isValidCity && isValidCity && isValidStreet && isValidUrl
+	}
+	
+	private func storeNewLocation(override: State<Bool>){
+		presentMap = false
+		fullAddress = "\(country), \(city), \(street)"
+		let geocoder = CLGeocoder()
+		geocoder.geocodeAddressString(fullAddress) {placemarks, error in
+			if let _ = error {
+				noLocationFound = true
+			} else {
+				var location: CLLocation?
+				
+				if let placemarks = placemarks, placemarks.count > 0 {
+					location = placemarks.first?.location
+				}
+				
+				if let location = location {
+					noLocationFound = false
+					let coordinate = location.coordinate
+					
+					// check if the user wants to override the last location
+					if override.wrappedValue {
+						studentLocation.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
+						
+						presentMap = true
+						
+					} else {
+						
+						// check if already have a pin on these coordinates
+						let alreadyPostedLocation = studentLocation.filter { loc in
+							loc.coordinate.latitude == coordinate.latitude && loc.coordinate.longitude == coordinate.longitude
+						}
+					
+						if !alreadyPostedLocation.isEmpty {
+							overrideMap = true
+						} else {
+							studentLocation.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
+							
+							presentMap = true
+						}
+					}
+					
+				} else {
+					noLocationFound = true
+					presentMap = false
+					overrideMap = false
+				}
+			}
+		}
 	}
 }
 

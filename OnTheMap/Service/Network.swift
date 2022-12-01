@@ -111,7 +111,6 @@ class Network {
 		req.httpBody = try JSONEncoder().encode(studentToPost)
 		
 		let (data, response) = try await URLSession.shared.data(for: req)
-		print(response)
 		let res = response as! HTTPURLResponse
 		
 		if res.statusCode != 200 {
