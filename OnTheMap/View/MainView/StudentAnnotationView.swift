@@ -11,19 +11,40 @@ struct StudentAnnotationView: View {
 	var firstName : String
 	var LastName : String
 	var url : String
+	@State private var showInfoCard = false
 	
     var body: some View {
-		VStack {
-			Text("\(firstName) \(LastName)")
-				.fontWeight(.semibold)
-			HStack{
-				LinkView(textMessage: "\(url)", destinationURL: url)
-				Spacer()
-				Image(systemName: "info.circle.fill")
-					.foregroundColor(Color("UdacityColor"))
-			}
+		VStack(spacing: 0){
+			Image(systemName: "map.circle.fill")
+				.resizable()
+				.scaledToFit()
+				.frame(width: 30, height: 30)
+				.font(.headline)
+				.foregroundColor(.white)
+				.padding(6)
+				.background(Color("UdacityColor"))
+				.cornerRadius(36)
+			Image(systemName: "triangle.fill")
+				.resizable()
+				.scaledToFit()
+				.foregroundColor(Color("UdacityColor"))
+				.frame(width: 10, height: 10)
+				.rotationEffect(Angle(degrees: 180))
+				.offset(y: -3)
+		}.onTapGesture {
+			showInfoCard.toggle()
 		}
-		.padding()
+		.sheet(isPresented: $showInfoCard) {
+			VStack {
+				Text("\(firstName) \(LastName)")
+					.fontWeight(.semibold)
+					.padding()
+				HStack{
+					LinkView(textMessage: "\(url)", destinationURL: url)
+				}
+			}
+			.presentationDetents([.height(100)])
+		}
     }
 }
 
