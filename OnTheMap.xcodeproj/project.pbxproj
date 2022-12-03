@@ -21,6 +21,7 @@
 		015FFF6B29292B4500CF94B2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015FFF6A29292B4500CF94B2 /* LoginView.swift */; };
 		015FFF6D29292B4500CF94B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 015FFF6C29292B4500CF94B2 /* Assets.xcassets */; };
 		015FFF7029292B4500CF94B2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 015FFF6F29292B4500CF94B2 /* Preview Assets.xcassets */; };
+		017770CE293BC202001FA9D6 /* StudentAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017770CD293BC202001FA9D6 /* StudentAnnotationView.swift */; };
 		0184E0AD29320ABC0067A812 /* OnTheMapViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184E0AC29320ABC0067A812 /* OnTheMapViewModifier.swift */; };
 		0184E0B0293213A90067A812 /* OnTheMap+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184E0AF293213A90067A812 /* OnTheMap+Extension.swift */; };
 		01AE8E93292CB209005A5264 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AE8E92292CB209005A5264 /* MainView.swift */; };
@@ -47,6 +48,7 @@
 		015FFF6A29292B4500CF94B2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		015FFF6C29292B4500CF94B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		015FFF6F29292B4500CF94B2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		017770CD293BC202001FA9D6 /* StudentAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentAnnotationView.swift; sourceTree = "<group>"; };
 		0184E0AC29320ABC0067A812 /* OnTheMapViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTheMapViewModifier.swift; sourceTree = "<group>"; };
 		0184E0AF293213A90067A812 /* OnTheMap+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnTheMap+Extension.swift"; sourceTree = "<group>"; };
 		01AE8E92292CB209005A5264 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				01AE8E94292CB29E005A5264 /* MapView.swift */,
 				01AE8E96292CB2F0005A5264 /* ListView.swift */,
 				0152F301292D27BF0011F7BB /* HeaderView.swift */,
+				017770CD293BC202001FA9D6 /* StudentAnnotationView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				014DAB78292A7EA1007D8D78 /* Login.swift in Sources */,
 				014DAB7A292A80A9007D8D78 /* Network.swift in Sources */,
 				0184E0B0293213A90067A812 /* OnTheMap+Extension.swift in Sources */,
+				017770CE293BC202001FA9D6 /* StudentAnnotationView.swift in Sources */,
 				014DAB7E292A8F78007D8D78 /* LoginViewModel.swift in Sources */,
 				015FFF6929292B4500CF94B2 /* OnTheMapApp.swift in Sources */,
 				0152F302292D27BF0011F7BB /* HeaderView.swift in Sources */,

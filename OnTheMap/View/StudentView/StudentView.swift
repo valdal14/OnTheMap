@@ -23,8 +23,8 @@ struct StudentView: View {
 	@State private var fullAddress = ""
 	@State private var presentMap = false
 	@State private var overrideMap = false
-	@State var studentLocation: [StudentLocation]
 	@State private var noLocationFound = false
+	@EnvironmentObject var mapVM : MapViewModel
 	
 	//MARK: - Validation States
 	@State private var isValidFirstName = false
@@ -95,10 +95,7 @@ struct StudentView: View {
 						
 						Section("Selected Location") {
 							VStack {
-								CurrentMapView(locations: Binding<[StudentLocation]>(
-									get: { studentLocation }, set: {_ in }
-								), coordinate: Binding<CLLocationCoordinate2D>(
-								get: { CLLocationCoordinate2D(latitude: (studentLocation.last?.coordinate.latitude)!, longitude: (studentLocation.last?.coordinate.longitude)!) }, set: {_ in }))
+								CurrentMapView()
 							}
 						}
 					}
@@ -115,9 +112,14 @@ struct StudentView: View {
 					
 					SearchButtonView(systemImageName: "plus.circle.fill", isValidForm: (presentMap && isValidForm)) {
 						Task {
-							studentVM.postUserInformation(firstName: studentLocation.last!.firstName, lastName: studentLocation.last!.lastName, latitude: (studentLocation.last?.coordinate.latitude)!, longitude: (studentLocation.last?.coordinate.longitude)!, country: country, city: city, street: street, mediaURL: url)
+							studentVM.postUserInformation(firstName: mapVM.studentLocations.last!.firstName, lastName: mapVM.studentLocations.last!.lastName, latitude: (mapVM.studentLocations.last?.coordinate.latitude)!, longitude: (mapVM.studentLocations.last?.coordinate.longitude)!, country: country, city: city, street: street, mediaURL: url)
 						}
-						
+					}
+					.alert("OnTheMap", isPresented: Binding<Bool>(
+						get: { studentVM.wasNewUserPosted }, set: { _ in })) {
+						Button("New Location added!!!") {
+							dismiss()
+						}
 					}
 				}
 				.padding()
@@ -133,7 +135,7 @@ struct StudentView: View {
 		.alert(studentVM.showOverrideLocationMessage, isPresented: $overrideMap) {
 			Button("Dismiss") {
 				overrideMap = false
-				studentLocation.removeLast()
+				mapVM.studentLocations.removeLast()
 			}
 			Button("Override") {
 				print("Override Location")
@@ -169,21 +171,20 @@ struct StudentView: View {
 					
 					// check if the user wants to override the last location
 					if override.wrappedValue {
-						studentLocation.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
-						
+						mapVM.studentLocations.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
+
 						presentMap = true
 						
 					} else {
 						
-						// check if already have a pin on these coordinates
-						let alreadyPostedLocation = studentLocation.filter { loc in
+						let alreadyPostedLocation = mapVM.studentLocations.filter { loc in
 							loc.coordinate.latitude == coordinate.latitude && loc.coordinate.longitude == coordinate.longitude
 						}
 					
 						if !alreadyPostedLocation.isEmpty {
 							overrideMap = true
 						} else {
-							studentLocation.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
+							mapVM.studentLocations.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
 							
 							presentMap = true
 						}
@@ -201,14 +202,14 @@ struct StudentView: View {
 
 struct StudentViewDark_Previews: PreviewProvider {
 	static var previews: some View {
-		StudentView(studentLocation: MainView().mapVM.studentLocations)
+		StudentView()
 			.preferredColorScheme(.dark)
 	}
 }
 
 struct StudentViewLight_Previews: PreviewProvider {
 	static var previews: some View {
-		StudentView(studentLocation: MainView().mapVM.studentLocations)
+		StudentView()
 			.preferredColorScheme(.light)
 	}
 }

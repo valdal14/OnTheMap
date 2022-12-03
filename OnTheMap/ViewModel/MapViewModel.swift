@@ -13,7 +13,7 @@ import Combine
 public class MapViewModel: ObservableObject {
 	
 	private var studentInformation = [Student]()
-	@Published private(set) var studentLocations: [StudentLocation] = []
+	@Published var studentLocations: [StudentLocation] = []
 	@Published private(set) var showStudentError = false
 	@Published private(set) var locationRequestCompled = false
 	

@@ -12,7 +12,8 @@ struct LoginView: View {
 	@State private var pwd = ""
 	@State private var isEmailValid = false
 	@State private var isValidaPWD = false
-	@StateObject var loginVM  = LoginViewModel()
+	@StateObject var loginVM = LoginViewModel()
+	@StateObject var mapVM = MapViewModel()
 	
 	var body: some View {
 		VStack {
@@ -49,6 +50,7 @@ struct LoginView: View {
 			
 			LinkView(textMessage: "Don't have an account? Sign Up", destinationURL: "https://auth.udacity.com/sign-in")
 		}
+		.environmentObject(mapVM)
 		.padding()
 	}
 }

@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ListView: View {
 	
-	@Binding var locations : [StudentLocation]
+	@EnvironmentObject var mapVM : MapViewModel
 	
 	var body: some View {
-		List(locations) { location in
+		List(mapVM.studentLocations) { location in
 			HStack {
 				Image(systemName: "mappin")
 					.fontWeight(.bold)
@@ -24,16 +24,14 @@ struct ListView: View {
 	
 	struct ListViewDark_Previews: PreviewProvider {
 		static var previews: some View {
-			ListView(locations: Binding<[StudentLocation]>(
-				get: { MapViewModel().studentLocations }, set: { _ in }))
+			ListView()
 			.preferredColorScheme(.dark)
 		}
 	}
 	
 	struct ListViewLight_Previews: PreviewProvider {
 		static var previews: some View {
-			ListView(locations: Binding<[StudentLocation]>(
-				get: { MapViewModel().studentLocations }, set: { _ in }))
+			ListView()
 			.preferredColorScheme(.light)
 		}
 	}

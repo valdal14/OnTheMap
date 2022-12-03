@@ -10,26 +10,22 @@ import MapKit
 
 struct MainView: View {
 	
-	@StateObject var mapVM = MapViewModel()
 	@State private var loading = true
+	@EnvironmentObject var mapVM : MapViewModel
 	
 	var body: some View {
 		VStack {
-			HeaderView(studentLocation: Binding<[StudentLocation]>(
-				get: { mapVM.studentLocations }, set: {_ in }))
+			HeaderView()
 			
 			NavigationStack {
 				if mapVM.locationRequestCompled {
 					TabView {
-						MapView(locations: Binding<[StudentLocation]>(
-							get: { mapVM.studentLocations }, set: {_ in }), coordinate: Binding<CLLocationCoordinate2D>(
-								get: { CLLocationCoordinate2D(latitude: (mapVM.studentLocations.last?.coordinate.latitude)!, longitude: (mapVM.studentLocations.last?.coordinate.longitude)!)}, set: { _ in }))
+						MapView()
 							.tabItem {
 								Label("Map", systemImage: "mappin.square.fill")
 							}
 						
-						ListView(locations: Binding<[StudentLocation]>(
-							get: { mapVM.studentLocations }, set: {_ in }))
+						ListView()
 							.tabItem {
 								Label("Map", systemImage: "list.bullet.rectangle.fill")
 							}

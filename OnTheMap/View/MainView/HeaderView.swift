@@ -9,8 +9,8 @@ import SwiftUI
 
 struct HeaderView: View {
 	
-	@Binding var studentLocation: [StudentLocation]
 	@State private var showingStudentView = false
+	@EnvironmentObject var mapVM : MapViewModel
 	
     var body: some View {
 		HStack {
@@ -18,8 +18,9 @@ struct HeaderView: View {
 				showingStudentView.toggle()
 			} label: {
 				Label("", systemImage: "mappin")
-			}.sheet(isPresented: $showingStudentView) {
-				StudentView(studentLocation: studentLocation)
+			}
+			.sheet(isPresented: $showingStudentView) {
+				StudentView()
 			}
 
 			Spacer()
@@ -41,16 +42,14 @@ struct HeaderView: View {
 
 struct HeaderViewDark_Previews: PreviewProvider {
     static var previews: some View {
-		HeaderView(studentLocation: Binding<[StudentLocation]>(
-			get: { MainView().mapVM.studentLocations }, set: { _ in }))
+		HeaderView()
 			.preferredColorScheme(.dark)
     }
 }
 
 struct HeaderViewLight_Previews: PreviewProvider {
 	static var previews: some View {
-		HeaderView(studentLocation: Binding<[StudentLocation]>(
-			get: { MainView().mapVM.studentLocations }, set: { _ in }))
+		HeaderView()
 			.preferredColorScheme(.light)
 	}
 }
