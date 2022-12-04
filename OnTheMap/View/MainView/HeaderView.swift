@@ -31,7 +31,7 @@ struct HeaderView: View {
 			Spacer()
 			
 			Button {
-				print("I was pressed")
+				mapVM.getStudentLocations()
 			} label: {
 				Label("", systemImage: "goforward")
 			}

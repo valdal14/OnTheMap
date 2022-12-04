@@ -12,12 +12,7 @@ struct MapView: View {
 	
 	@EnvironmentObject var mapVM : MapViewModel
 	
-	var body: some View {
-//		Map(coordinateRegion: Binding<MKCoordinateRegion>(
-//			get: { MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: (mapVM.studentLocations.last?.coordinate.latitude)!, longitude: (mapVM.studentLocations.last?.coordinate.longitude)!), span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)) }, set: {_ in }), annotationItems: mapVM.studentLocations) { loc in
-//				MapMarker(coordinate: CLLocationCoordinate2D(latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude))
-//			}
-		
+	var body: some View {		
 		Map(coordinateRegion: Binding<MKCoordinateRegion>(
 			get: { MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: (mapVM.studentLocations.last?.coordinate.latitude)!, longitude: (mapVM.studentLocations.last?.coordinate.longitude)!), span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)) }, set: {_ in }), annotationItems: mapVM.studentLocations) { loc in
 				MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude)) {

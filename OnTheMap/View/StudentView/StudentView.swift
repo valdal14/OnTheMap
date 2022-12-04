@@ -105,6 +105,7 @@ struct StudentView: View {
 				HStack {
 					
 					SearchButtonView(systemImageName: "magnifyingglass", isValidForm: isValidForm) {
+						hideKeyboard()
 						storeNewLocation(override: State<Bool>(initialValue: overrideMap))
 					}
 					

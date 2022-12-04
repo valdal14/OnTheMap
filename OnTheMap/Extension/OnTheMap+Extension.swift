@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UIKit
+import SwiftUI
 
 extension String {
 	
@@ -33,3 +35,11 @@ extension String {
 		return country.count >= 3 && street.count >= 3 && city.count >= 3
 	}
 }
+
+#if canImport(UIKit)
+extension View {
+	func hideKeyboard() {
+		UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+	}
+}
+#endif
