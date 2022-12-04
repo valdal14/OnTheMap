@@ -92,7 +92,10 @@ class Network {
 			
 			let decodedData = try? JSONDecoder().decode(StudentInfo.self, from: data)
 			
-			if let decodedData = decodedData {
+			if var decodedData = decodedData {
+				decodedData.results.sort { s1, s2 in
+					s1.createdAt > s2.createdAt
+				}
 				return decodedData.results
 			} else {
 				throw NetworkError.decodingError
@@ -102,8 +105,8 @@ class Network {
 	
 	func postStudentLocation(firstName: String, lastName: String, latitude: Double, longitude: Double, mapString: String, mediaURL: String) async throws -> Bool {
 		guard let url = Endpoint.addLocation.url else { throw NetworkError.badURL }
-	
-		let studentToPost = Student(firstName: firstName, lastName: lastName, latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, uniqueKey: UUID().uuidString)
+		
+		let studentToPost = Student(createdAt: Date().formatted(), firstName: firstName, lastName: lastName, latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, uniqueKey: UUID().uuidString)
 		
 		var req = URLRequest(url: url)
 		req.httpMethod = "POST"

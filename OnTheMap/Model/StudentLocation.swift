@@ -9,10 +9,11 @@ import Foundation
 import CoreLocation
 
 struct StudentInfo: Codable {
-	let results: [Student]
+	var results: [Student]
 }
 
 struct Student : Codable {
+	let createdAt: String
 	let firstName: String
 	let lastName: String
 	let latitude: Double
