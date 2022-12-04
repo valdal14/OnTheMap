@@ -5,7 +5,7 @@ SwiftUI Project using MapKit with SwiftUI
 OnTheMap is a project developed as part of the iOS Udacity Nanodegree 
 
 # Video Tutorial
-[![Watch the video](https://github.com/valdal14/OnTheMap/blob/main/onTheMapBanner.png?raw=true)](https://youtu.be/np7TpUTyq2g)
+[![Watch the video](https://github.com/valdal14/OnTheMap/blob/main/onTheMapBanner.png?raw=true)](https://youtu.be/SILmuMBn1hE)
 
 # Contributing
 When contributing to this repository, please first discuss the change you wish to make via issue,
