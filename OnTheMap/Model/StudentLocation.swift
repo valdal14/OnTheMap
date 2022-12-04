@@ -25,6 +25,7 @@ struct Student : Codable {
 
 struct StudentLocation: Identifiable, Equatable {
 	let id = UUID()
+	let createdAt: String
 	let firstName: String
 	let lastName: String
 	let mapString: String

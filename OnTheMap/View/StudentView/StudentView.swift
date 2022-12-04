@@ -172,7 +172,7 @@ struct StudentView: View {
 					
 					// check if the user wants to override the last location
 					if override.wrappedValue {
-						mapVM.studentLocations.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
+						mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
 
 						presentMap = true
 						
@@ -185,7 +185,7 @@ struct StudentView: View {
 						if !alreadyPostedLocation.isEmpty {
 							overrideMap = true
 						} else {
-							mapVM.studentLocations.append(StudentLocation(firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
+							mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
 							
 							presentMap = true
 						}

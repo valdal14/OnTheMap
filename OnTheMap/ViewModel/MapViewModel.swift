@@ -44,7 +44,8 @@ public class MapViewModel: ObservableObject {
 		var studentLocations: [StudentLocation] = []
 		
 		studentsInfo.forEach { student in
-			studentLocations.append(StudentLocation(firstName: student.firstName,
+			studentLocations.append(StudentLocation(createdAt: Date().formatted(),
+													 firstName: student.firstName,
 													 lastName: student.firstName,
 													 mapString: student.mapString,
 													 mediaURL: student.mediaURL,
