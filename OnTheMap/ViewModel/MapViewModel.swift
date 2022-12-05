@@ -14,8 +14,9 @@ public class MapViewModel: ObservableObject {
 	
 	private var studentInformation = [Student]()
 	@Published var studentLocations: [StudentLocation] = []
-	@Published private(set) var showStudentError = false
+	@Published var showStudentError = false
 	@Published private(set) var locationRequestCompled = false
+	var networkError = ""
 	
 	func getStudentLocations() {
 		Task {
@@ -33,8 +34,7 @@ public class MapViewModel: ObservableObject {
 				studentLocations = parseStudentLocationResponse(studentsInfo: studentInformation)
 				showStudentError = false
 			} catch let error as Network.NetworkError {
-				print("Get Student location error: \(error.localizedDescription)")
-				showStudentError = true
+				(networkError, showStudentError) = Network.shared.handleErrorResponse(error: error)
 			}
 		}
 	}

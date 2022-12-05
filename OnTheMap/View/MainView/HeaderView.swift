@@ -13,7 +13,7 @@ struct HeaderView: View {
 	@EnvironmentObject var mapVM : MapViewModel
 	
     var body: some View {
-		HStack {
+		HStack(alignment: .top) {
 			Button {
 				showingStudentView.toggle()
 			} label: {

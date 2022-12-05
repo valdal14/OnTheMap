@@ -16,8 +16,8 @@ struct MainView: View {
 	var body: some View {
 		VStack {
 			HeaderView()
-			
-			NavigationStack {
+			Spacer()
+			VStack {
 				if mapVM.locationRequestCompled {
 					TabView {
 						MapView()
@@ -32,6 +32,13 @@ struct MainView: View {
 					}
 				} else {
 					ProgressView()
+				}
+			}
+			.alert(mapVM.networkError, isPresented: Binding<Bool>(
+				get: { mapVM.showStudentError }, set: {_ in })
+			) {
+				Button("Please try again", role: .cancel) {
+					mapVM.showStudentError = false
 				}
 			}
 		}

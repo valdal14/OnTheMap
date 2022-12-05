@@ -26,7 +26,7 @@ class Network {
 		var stringValue: String {
 			switch self {
 				case .login: return Endpoint.udacityBaseURL + "session"
-				case .studentLocation: return Endpoint.udacityBaseURL + "StudentLocation?order=-updatedAt"
+				case .studentLocation: return Endpoint.udacityBaseURL + "StudentLocation?order=-updatedAt&limit=100"
 				case .addLocation: return Endpoint.udacityBaseURL + "StudentLocation"
 			}
 		}
@@ -39,9 +39,12 @@ class Network {
 		case badURL
 		case badRequest
 		case decodingError
-		case userAlreadyPostLocation
+		case notFound
+		case serverError
+		case wrongCredentials
 	}
 	
+	private init(){}
 	
 	func login(username: String, password: String) async throws {
 		
@@ -59,10 +62,8 @@ class Network {
 		
 		let res = response as! HTTPURLResponse
 		
-		if res.statusCode != 200 {
-			throw NetworkError.badRequest
-		} else {
-			
+		switch res.statusCode {
+		case 200:
 			// skip over the first 5 characters
 			let range = (5..<resposeData.count)
 			let newData = resposeData.subdata(in: range)
@@ -76,6 +77,12 @@ class Network {
 			} else {
 				throw NetworkError.decodingError
 			}
+		case 404:
+			throw NetworkError.notFound
+		case 500:
+			throw NetworkError.serverError
+		default:
+			throw NetworkError.wrongCredentials
 		}
 	}
 	
@@ -86,10 +93,8 @@ class Network {
 		
 		let res = response as! HTTPURLResponse
 		
-		if res.statusCode != 200 {
-			throw NetworkError.badRequest
-		} else {
-			
+		switch res.statusCode {
+		case 200:
 			let decodedData = try? JSONDecoder().decode(StudentInfo.self, from: data)
 			
 			if var decodedData = decodedData {
@@ -100,6 +105,12 @@ class Network {
 			} else {
 				throw NetworkError.decodingError
 			}
+		case 404:
+			throw NetworkError.notFound
+		case 500:
+			throw NetworkError.serverError
+		default:
+			throw NetworkError.wrongCredentials
 		}
 	}
 	
@@ -116,9 +127,8 @@ class Network {
 		let (data, response) = try await URLSession.shared.data(for: req)
 		let res = response as! HTTPURLResponse
 		
-		if res.statusCode != 200 {
-			throw NetworkError.badRequest
-		} else {
+		switch res.statusCode {
+		case 200:
 			let decodedData = try? JSONDecoder().decode(StudentResponse.self, from: data)
 			
 			if let _ = decodedData {
@@ -126,7 +136,33 @@ class Network {
 			} else {
 				throw NetworkError.decodingError
 			}
+		case 404:
+			throw NetworkError.notFound
+		case 500:
+			throw NetworkError.serverError
+		default:
+			throw NetworkError.wrongCredentials
 		}
 	}
 	
+	func handleErrorResponse(error: NetworkError) -> (String, Bool) {
+		var networkError = ""
+		
+		switch error {
+		case .badRequest:
+			networkError = "400 - Bad Request"
+		case .serverError:
+			networkError = "500 - Internal Server Error"
+		case .notFound:
+			networkError = "404 - Resource not found"
+		case .decodingError:
+			networkError = "404 - Decoding Error"
+		case .wrongCredentials:
+			networkError = "Wrong email or password"
+		case .badURL:
+			networkError = "400 - Bad URL"
+		}
+		
+		return (networkError, true)
+	}
 }
