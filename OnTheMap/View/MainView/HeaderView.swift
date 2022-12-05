@@ -15,14 +15,11 @@ struct HeaderView: View {
     var body: some View {
 		HStack(alignment: .top) {
 			Button {
-				showingStudentView.toggle()
+				mapVM.getStudentLocations()
 			} label: {
-				Label("", systemImage: "mappin")
+				Label("", systemImage: "lock.slash.fill")
 			}
-			.sheet(isPresented: $showingStudentView) {
-				StudentView()
-			}
-
+			
 			Spacer()
 			
 			Text("On The Map")
@@ -31,9 +28,12 @@ struct HeaderView: View {
 			Spacer()
 			
 			Button {
-				mapVM.getStudentLocations()
+				showingStudentView.toggle()
 			} label: {
-				Label("", systemImage: "goforward")
+				Label("", systemImage: "mappin")
+			}
+			.sheet(isPresented: $showingStudentView) {
+				StudentView()
 			}
 		}
 		.padding()
