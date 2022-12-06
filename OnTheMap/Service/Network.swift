@@ -86,6 +86,49 @@ class Network {
 		}
 	}
 	
+	func logout() async throws -> Bool {
+		guard let url = Endpoint.login.url else { throw NetworkError.badURL }
+		
+		var req = URLRequest(url: url)
+		req.httpMethod = "DELETE"
+		var xsrfCookie: HTTPCookie? = nil
+		let sharedCookieStorage = HTTPCookieStorage.shared
+		
+		for cookie in sharedCookieStorage.cookies! {
+		  if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+		}
+		
+		if let xsrfCookie = xsrfCookie {
+			req.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+		}
+		
+		let (resposeData, response) = try await URLSession.shared.data(for: req)
+		
+		let res = response as! HTTPURLResponse
+		
+		switch res.statusCode {
+		case 200:
+			// skip over the first 5 characters
+			let range = (5..<resposeData.count)
+			let newData = resposeData.subdata(in: range)
+			// ------------------------------->
+			
+			let decodedData = try? JSONDecoder().decode(LogoutRequest.self, from: newData)
+			
+			if let _ = decodedData {
+				return true
+			} else {
+				throw NetworkError.decodingError
+			}
+		case 404:
+			throw NetworkError.notFound
+		case 500:
+			throw NetworkError.serverError
+		default:
+			throw NetworkError.wrongCredentials
+		}
+	}
+	
 	func getStudentLocation() async throws -> [Student] {
 		guard let url = Endpoint.studentLocation.url else { throw NetworkError.badURL }
 		

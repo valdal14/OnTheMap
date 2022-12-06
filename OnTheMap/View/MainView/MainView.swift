@@ -11,6 +11,7 @@ import MapKit
 struct MainView: View {
 	
 	@State private var loading = true
+	@State private var backToLogin = false
 	@EnvironmentObject var mapVM : MapViewModel
 	
 	var body: some View {
@@ -39,8 +40,12 @@ struct MainView: View {
 			) {
 				Button("Please try again", role: .cancel) {
 					mapVM.showStudentError = false
+					backToLogin = true
 				}
 			}
+		}
+		.fullScreenCover(isPresented: $backToLogin) {
+			LoginView()
 		}
 		.onAppear { mapVM.getStudentLocations() }
 	}
