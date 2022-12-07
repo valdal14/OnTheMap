@@ -14,8 +14,6 @@ struct StudentView: View {
 	//MARK: Binding variables
 	@Environment(\.dismiss) var dismiss
 	@StateObject private var studentVM = StudentViewModel()
-	@State private var firstName = ""
-	@State private var lastName = ""
 	@State private var country = ""
 	@State private var city = ""
 	@State private var street = ""
@@ -43,18 +41,14 @@ struct StudentView: View {
 			VStack {
 				Form {
 					Section {
-						TextField("first name", text: $firstName)
+						TextField("first name", text: Binding<String>(
+						get: { studentVM.firstName }, set: {_ in}))
 							.onTheMapTextFieldModifier()
-							.onChange(of: firstName) { firstName in
-								isValidFirstName = String.validateCommonFields(firstName)
-								isValidForm = validateForm()
-							}
-						TextField("last name", text: $lastName)
+							.disabled(true)
+						TextField("last name", text: Binding<String>(
+							get: { studentVM.lastName }, set: {_ in}))
 							.onTheMapTextFieldModifier()
-							.onChange(of: lastName) { lastName in
-								isValidLastName = String.validateCommonFields(lastName)
-								isValidForm = validateForm()
-							}
+							.disabled(true)
 					} header: {
 						Text("Personal Information")
 					}
@@ -113,7 +107,7 @@ struct StudentView: View {
 					
 					SearchButtonView(systemImageName: "plus.circle.fill", isValidForm: (presentMap && isValidForm)) {
 						Task {
-							studentVM.postUserInformation(firstName: mapVM.studentLocations.last!.firstName, lastName: mapVM.studentLocations.last!.lastName, latitude: (mapVM.studentLocations.last?.coordinate.latitude)!, longitude: (mapVM.studentLocations.last?.coordinate.longitude)!, country: country, city: city, street: street, mediaURL: url)
+							studentVM.postNewStudentInformation(firstName: mapVM.studentLocations.last!.firstName, lastName: mapVM.studentLocations.last!.lastName, latitude: (mapVM.studentLocations.last?.coordinate.latitude)!, longitude: (mapVM.studentLocations.last?.coordinate.longitude)!, country: country, city: city, street: street, mediaURL: url)
 						}
 					}
 					.alert("OnTheMap", isPresented: Binding<Bool>(
@@ -145,6 +139,7 @@ struct StudentView: View {
 				
 			}
 		}
+		.onAppear { studentVM.getRandomUserInformation() }
 	}
 	
 	//MARK: - Helper function
@@ -172,7 +167,7 @@ struct StudentView: View {
 					
 					// check if the user wants to override the last location
 					if override.wrappedValue {
-						mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
+						mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: studentVM.firstName, lastName: studentVM.lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
 
 						presentMap = true
 						
@@ -185,7 +180,7 @@ struct StudentView: View {
 						if !alreadyPostedLocation.isEmpty {
 							overrideMap = true
 						} else {
-							mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: firstName, lastName: lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
+							mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: studentVM.firstName, lastName: studentVM.lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
 							
 							presentMap = true
 						}

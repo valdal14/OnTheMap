@@ -22,12 +22,16 @@ class Network {
 		case login
 		case studentLocation
 		case addLocation
+		case updateLocation
+		case getRandomUser
 		
 		var stringValue: String {
 			switch self {
 				case .login: return Endpoint.udacityBaseURL + "session"
 				case .studentLocation: return Endpoint.udacityBaseURL + "StudentLocation?order=-updatedAt&limit=100"
 				case .addLocation: return Endpoint.udacityBaseURL + "StudentLocation"
+				case .updateLocation: return Endpoint.udacityBaseURL + "StudentLocation" + Authentication.sessionId
+				case .getRandomUser: return Endpoint.udacityBaseURL + "users/3903878747"
 			}
 		}
 		
@@ -129,6 +133,36 @@ class Network {
 		}
 	}
 	
+	func getRandomUserInfo() async throws -> StudentInformation {
+		guard let url = Endpoint.getRandomUser.url else { throw NetworkError.badURL }
+		
+		let (resposeData, response) = try await URLSession.shared.data(for: URLRequest(url: url))
+		
+		let res = response as! HTTPURLResponse
+		
+		switch res.statusCode {
+		case 200:
+			// skip over the first 5 characters
+			let range = (5..<resposeData.count)
+			let newData = resposeData.subdata(in: range)
+			// ------------------------------->
+			
+			let decodedData = try? JSONDecoder().decode(StudentInformation.self, from: newData)
+			
+			if let decodedData = decodedData {
+				return decodedData
+			} else {
+				throw NetworkError.decodingError
+			}
+		case 404:
+			throw NetworkError.notFound
+		case 500:
+			throw NetworkError.serverError
+		default:
+			throw NetworkError.wrongCredentials
+		}
+	}
+	
 	func getStudentLocation() async throws -> [Student] {
 		guard let url = Endpoint.studentLocation.url else { throw NetworkError.badURL }
 		
@@ -173,6 +207,37 @@ class Network {
 		switch res.statusCode {
 		case 200:
 			let decodedData = try? JSONDecoder().decode(StudentResponse.self, from: data)
+			
+			if let _ = decodedData {
+				return true
+			} else {
+				throw NetworkError.decodingError
+			}
+		case 404:
+			throw NetworkError.notFound
+		case 500:
+			throw NetworkError.serverError
+		default:
+			throw NetworkError.wrongCredentials
+		}
+	}
+	
+	func updateUser(firstName: String, lastName: String, latitude: Double, longitude: Double, mapString: String, mediaURL: String) async throws -> Bool {
+		guard let url = Endpoint.updateLocation.url else { throw NetworkError.badURL }
+		
+		let studentToPost = Student(createdAt: Date().formatted(), firstName: firstName, lastName: lastName, latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, uniqueKey: UUID().uuidString)
+		
+		var req = URLRequest(url: url)
+		req.httpMethod = "PUT"
+		req.addValue("application/json", forHTTPHeaderField: "Content-Type")
+		req.httpBody = try JSONEncoder().encode(studentToPost)
+		
+		let (data, response) = try await URLSession.shared.data(for: req)
+		let res = response as! HTTPURLResponse
+		
+		switch res.statusCode {
+		case 200:
+			let decodedData = try? JSONDecoder().decode(UpdateStudent.self, from: data)
 			
 			if let _ = decodedData {
 				return true

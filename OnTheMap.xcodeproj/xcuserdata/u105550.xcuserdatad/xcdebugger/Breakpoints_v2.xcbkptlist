@@ -7,64 +7,80 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0B961DDE-C6D2-441C-AFB9-CF458BD6DB2C"
+            uuid = "AFC80380-D3B2-48FA-9685-67484707CCC9"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "OnTheMap/Service/Network.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
-            landmarkName = "logout()"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
+            landmarkName = "updateUser(firstName:lastName:latitude:longitude:mapString:mediaURL:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "0B961DDE-C6D2-441C-AFB9-CF458BD6DB2C - 93421f59786054b4"
+                  uuid = "AFC80380-D3B2-48FA-9685-67484707CCC9 - 3e61abc063c9b9c4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for OnTheMap.Network.logout() async throws -&gt; Swift.Bool"
+                  symbolName = "(1) suspend resume partial function for OnTheMap.Network.updateUser(firstName: Swift.String, lastName: Swift.String, latitude: Swift.Double, longitude: Swift.Double, mapString: Swift.String, mediaURL: Swift.String) async throws -&gt; Swift.Bool"
                   moduleName = "OnTheMap"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/u105550/Desktop/OnTheMap/OnTheMap/Service/Network.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "90"
-                  endingLineNumber = "90"
-                  offsetFromSymbolStart = "188">
+                  startingLineNumber = "226"
+                  endingLineNumber = "226"
+                  offsetFromSymbolStart = "168">
                </Location>
                <Location
-                  uuid = "0B961DDE-C6D2-441C-AFB9-CF458BD6DB2C - 93421f59786054b4"
+                  uuid = "AFC80380-D3B2-48FA-9685-67484707CCC9 - 3e61abc063c9b9c4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for OnTheMap.Network.logout() async throws -&gt; Swift.Bool"
+                  symbolName = "(1) suspend resume partial function for OnTheMap.Network.updateUser(firstName: Swift.String, lastName: Swift.String, latitude: Swift.Double, longitude: Swift.Double, mapString: Swift.String, mediaURL: Swift.String) async throws -&gt; Swift.Bool"
                   moduleName = "OnTheMap"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/u105550/Desktop/OnTheMap/OnTheMap/Service/Network.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "90"
-                  endingLineNumber = "90"
-                  offsetFromSymbolStart = "300">
+                  startingLineNumber = "226"
+                  endingLineNumber = "226"
+                  offsetFromSymbolStart = "444">
                </Location>
                <Location
-                  uuid = "0B961DDE-C6D2-441C-AFB9-CF458BD6DB2C - 93421f59786054b4"
+                  uuid = "AFC80380-D3B2-48FA-9685-67484707CCC9 - 3e61abc063c9b9c4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for OnTheMap.Network.logout() async throws -&gt; Swift.Bool"
+                  symbolName = "(1) suspend resume partial function for OnTheMap.Network.updateUser(firstName: Swift.String, lastName: Swift.String, latitude: Swift.Double, longitude: Swift.Double, mapString: Swift.String, mediaURL: Swift.String) async throws -&gt; Swift.Bool"
                   moduleName = "OnTheMap"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/u105550/Desktop/OnTheMap/OnTheMap/Service/Network.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "90"
-                  endingLineNumber = "90"
-                  offsetFromSymbolStart = "1972">
+                  startingLineNumber = "226"
+                  endingLineNumber = "226"
+                  offsetFromSymbolStart = "1344">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8CCA75D1-F22F-4FA6-A03A-0CF6F3B485DF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "OnTheMap/View/StudentView/StudentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
+            landmarkName = "storeNewLocation(override:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
