@@ -9,20 +9,21 @@ import SwiftUI
 
 struct HeaderView: View {
 	
+	let showOverrideLocationMessage = "You already placed a pin on the Map. Would you like to override?"
+	@State private var overrideMap = false
 	@State private var showingStudentView = false
+	@State private var showingStudentUpdateView = false
 	@EnvironmentObject var mapVM : MapViewModel
+	@StateObject var headerVM = HeaderViewModel()
 	
     var body: some View {
-		HStack {
+		HStack(alignment: .top) {
 			Button {
-				showingStudentView.toggle()
+				headerVM.performLogout()
 			} label: {
-				Label("", systemImage: "mappin")
+				Label("", systemImage: "lock.slash.fill")
 			}
-			.sheet(isPresented: $showingStudentView) {
-				StudentView()
-			}
-
+			
 			Spacer()
 			
 			Text("On The Map")
@@ -31,11 +32,39 @@ struct HeaderView: View {
 			Spacer()
 			
 			Button {
-				mapVM.getStudentLocations()
+				if !headerVM.checkIfTheCurrentUserAlreadyPostLocation() {
+					overrideMap = true
+				} else {
+					showingStudentView.toggle()
+				}
 			} label: {
-				Label("", systemImage: "goforward")
+				Label("", systemImage: "mappin")
+			}
+			.sheet(isPresented: $showingStudentUpdateView, content: {
+				UpdateStudentView()
+			})
+			.sheet(isPresented: $showingStudentView) {
+				StudentView()
 			}
 		}
+		.fullScreenCover(isPresented: Binding<Bool>(
+			get: { headerVM.wasLoggedOut }, set: {_ in }
+		), content: {
+			LoginView()
+		})
+		.alert(headerVM.networkError, isPresented: Binding<Bool>(
+			get: { headerVM.showLogoutError }, set: {_ in })
+		) {
+			Button("Please try again", role: .cancel) {
+				headerVM.showLogoutError = false
+			}
+		}
+		.alert(showOverrideLocationMessage, isPresented: $overrideMap) {
+				Button("Override") {
+					showingStudentUpdateView.toggle()
+				}
+				Button("Cancel") {}
+			}
 		.padding()
     }
 }

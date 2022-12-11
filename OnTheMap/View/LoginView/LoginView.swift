@@ -16,7 +16,7 @@ struct LoginView: View {
 	@StateObject var mapVM = MapViewModel()
 	
 	var body: some View {
-		VStack {
+		NavigationStack {
 			LoginHeader()
 			
 			TextField("Username", text: $email)
@@ -38,7 +38,7 @@ struct LoginView: View {
 			), content: {
 				MainView()
 			})
-			.alert("Login Failed", isPresented: Binding<Bool>(
+			.alert(loginVM.networkError, isPresented: Binding<Bool>(
 				get: { loginVM.showLoginError }, set: {_ in })
 			) {
 				Button("Please try again", role: .cancel) {

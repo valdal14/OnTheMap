@@ -12,6 +12,7 @@ class LoginViewModel: ObservableObject {
 	
 	@Published var showLoginError = false
 	@Published private(set) var presentMainView = false
+	private(set) var networkError = ""
 	
 	func performUdacityLogin(username: String, password: String) {
 		Task {
@@ -20,8 +21,7 @@ class LoginViewModel: ObservableObject {
 				showLoginError = false
 				presentMainView = true
 			} catch let error as Network.NetworkError {
-				print("LOGIN FAILED: \(error)")
-				showLoginError = true
+				(networkError, showLoginError) = Network.shared.handleErrorResponse(error: error)
 			}
 		}
 	}
