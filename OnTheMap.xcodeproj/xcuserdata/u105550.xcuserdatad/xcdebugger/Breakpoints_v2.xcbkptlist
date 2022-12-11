@@ -148,5 +148,68 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C4ECF3AD-EE54-4B9E-8541-F4DE6B6A3077"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "OnTheMap/Service/Network.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "login(username:password:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C4ECF3AD-EE54-4B9E-8541-F4DE6B6A3077 - 41d77e724652f1f0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for OnTheMap.Network.login(username: Swift.String, password: Swift.String) async throws -&gt; ()"
+                  moduleName = "OnTheMap"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/u105550/Desktop/OnTheMap/OnTheMap/Service/Network.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "57"
+                  endingLineNumber = "57"
+                  offsetFromSymbolStart = "136">
+               </Location>
+               <Location
+                  uuid = "C4ECF3AD-EE54-4B9E-8541-F4DE6B6A3077 - 41d77e724652f1f0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for OnTheMap.Network.login(username: Swift.String, password: Swift.String) async throws -&gt; ()"
+                  moduleName = "OnTheMap"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/u105550/Desktop/OnTheMap/OnTheMap/Service/Network.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "57"
+                  endingLineNumber = "57"
+                  offsetFromSymbolStart = "292">
+               </Location>
+               <Location
+                  uuid = "C4ECF3AD-EE54-4B9E-8541-F4DE6B6A3077 - 41d77e724652f1f0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for OnTheMap.Network.login(username: Swift.String, password: Swift.String) async throws -&gt; ()"
+                  moduleName = "OnTheMap"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/u105550/Desktop/OnTheMap/OnTheMap/Service/Network.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "57"
+                  endingLineNumber = "57"
+                  offsetFromSymbolStart = "1120">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

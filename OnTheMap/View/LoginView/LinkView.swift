@@ -10,11 +10,31 @@ import SwiftUI
 struct LinkView: View {
 	let textMessage : String
 	let destinationURL : String
+	@StateObject var loginVM = LoginViewModel()
+	
     var body: some View {
-		Link(textMessage, destination: URL(string: destinationURL)!)
-			.fontWeight(.light)
-			.tint(Color("UdacityColor"))
-			.frame(maxWidth: .infinity, alignment: .center)
+		VStack {
+			if loginVM.isInternetAvailable {
+				Image(systemName: loginVM.wifiImageName)
+					.foregroundColor(Color("UdacityColor"))
+					.frame(width: 50, height: 50, alignment: .center)
+				Text(loginVM.wifiNetworkDescription)
+					.fontWeight(.ultraLight)
+					.padding(.bottom, 2)
+				Link(textMessage, destination: URL(string: destinationURL)!)
+					.fontWeight(.light)
+					.tint(Color("UdacityColor"))
+					.frame(maxWidth: .infinity, alignment: .center)
+			} else {
+				Image(systemName: loginVM.wifiImageName)
+					.foregroundColor(Color("UdacityColor"))
+					.frame(width: 50, height: 50, alignment: .center)
+				Text(loginVM.wifiNetworkDescription)
+					.fontWeight(.ultraLight)
+					.padding(.bottom, 2)
+			}
+		}
+		
     }
 }
 
