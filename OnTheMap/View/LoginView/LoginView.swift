@@ -30,7 +30,7 @@ struct LoginView: View {
 					isValidaPWD = String.validatePassword(password)
 				}
 			
-			ButtonLoginView(btnText: "Login", isValidForm: (isEmailValid && isValidaPWD), alignment: .center) {
+			ButtonLoginView(btnText: "Login", isValidForm: (isEmailValid && isValidaPWD && loginVM.isInternetAvailable), alignment: .center) {
 				loginVM.performUdacityLogin(username: email, password: pwd)
 			}
 			.fullScreenCover(isPresented: Binding<Bool>(

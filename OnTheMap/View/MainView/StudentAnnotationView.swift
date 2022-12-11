@@ -43,7 +43,7 @@ struct StudentAnnotationView: View {
 					LinkView(textMessage: "\(url)", destinationURL: url)
 				}
 			}
-			.presentationDetents([.height(100)])
+			.presentationDetents([.height(200)])
 		}
     }
 }
