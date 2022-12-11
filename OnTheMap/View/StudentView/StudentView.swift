@@ -14,23 +14,15 @@ struct StudentView: View {
 	//MARK: Binding variables
 	@Environment(\.dismiss) var dismiss
 	@StateObject private var studentVM = StudentViewModel()
-	@State private var country = ""
-	@State private var city = ""
-	@State private var street = ""
-	@State private var url = ""
-	@State private var fullAddress = ""
+	@State private var address = ""
+	@State private var mediaUrl = ""
 	@State private var presentMap = false
-	@State private var overrideMap = false
 	@State private var noLocationFound = false
 	@EnvironmentObject var mapVM : MapViewModel
 	
 	//MARK: - Validation States
-	@State private var isValidFirstName = false
-	@State private var isValidLastName = false
-	@State private var isValidCountry = false
-	@State private var isValidCity = false
-	@State private var isValidStreet = false
 	@State private var isValidUrl = false
+	@State private var isValidAddress = false
 	@State private var isValidForm = false
 	
 	//MARK: - View
@@ -39,53 +31,35 @@ struct StudentView: View {
 		
 		HStack{
 			VStack {
+				VStack {
+					Text("Welcome \(studentVM.firstName) \(studentVM.lastName)")
+						.padding()
+					Text("Fill the form to search a new location")
+					Text("URL and Address are mandatory")
+						.fontWeight(.ultraLight)
+				}
 				Form {
 					Section {
-						TextField("first name", text: Binding<String>(
-						get: { studentVM.firstName }, set: {_ in}))
+						TextField("personal url", text: $mediaUrl)
 							.onTheMapTextFieldModifier()
-							.disabled(true)
-						TextField("last name", text: Binding<String>(
-							get: { studentVM.lastName }, set: {_ in}))
-							.onTheMapTextFieldModifier()
-							.disabled(true)
-					} header: {
-						Text("Personal Information")
-					}
-					Section {
-						TextField("personal url", text: $url)
-							.onTheMapTextFieldModifier()
-							.onChange(of: url) { url in
+							.onChange(of: mediaUrl) { url in
 								isValidUrl = String.validateURL(url)
 								isValidForm = validateForm()
 							}
 					} header: {
-						Text("URL Information")
+						Text("URL")
 					}
 					Section {
-						TextField("country", text: $country)
+						TextField("full address", text: $address)
 							.onTheMapTextFieldModifier()
-							.onChange(of: country) { country in
-								isValidCountry = String.validateCommonFields(country)
-								isValidForm = validateForm()
-							}
-						TextField("city", text: $city)
-							.onTheMapTextFieldModifier()
-							.onChange(of: city) { city in
-								isValidCity = String.validateCommonFields(city)
-								isValidForm = validateForm()
-							}
-						TextField("street", text: $street)
-							.onTheMapTextFieldModifier()
-							.onChange(of: street) { street in
-								isValidStreet = String.validateCommonFields(street)
+							.onChange(of: address) { address in
+								isValidAddress = String.validateCommonFields(address)
 								isValidForm = validateForm()
 							}
 					} header: {
-						Text("Location Information")
+						Text("Address")
 					}
-					
-					if presentMap && isValidForm {
+					if presentMap {
 						
 						Section("Selected Location") {
 							VStack {
@@ -93,65 +67,51 @@ struct StudentView: View {
 							}
 						}
 					}
-					
 				}
 				
 				HStack {
 					
-					SearchButtonView(systemImageName: "magnifyingglass", isValidForm: isValidForm) {
+					SearchButtonView(systemImageName: "magnifyingglass", isValidForm: (isValidAddress && isValidUrl)) {
 						hideKeyboard()
-						storeNewLocation(override: State<Bool>(initialValue: overrideMap))
+						storeNewLocation()
 					}
 					
 					Spacer()
 					
-					SearchButtonView(systemImageName: "plus.circle.fill", isValidForm: (presentMap && isValidForm)) {
+					SearchButtonView(systemImageName: "plus.circle.fill", isValidForm: (presentMap && isValidAddress && isValidUrl)) {
 						Task {
-							studentVM.postNewStudentInformation(firstName: mapVM.studentLocations.last!.firstName, lastName: mapVM.studentLocations.last!.lastName, latitude: (mapVM.studentLocations.last?.coordinate.latitude)!, longitude: (mapVM.studentLocations.last?.coordinate.longitude)!, country: country, city: city, street: street, mediaURL: url)
+							studentVM.postNewStudentInformation(firstName: mapVM.studentLocations.last!.firstName, lastName: mapVM.studentLocations.last!.lastName, latitude: (mapVM.studentLocations.last?.coordinate.latitude)!, longitude: (mapVM.studentLocations.last?.coordinate.longitude)!, address: address, mediaURL: mediaUrl)
 						}
 					}
 					.alert("OnTheMap", isPresented: Binding<Bool>(
-						get: { studentVM.wasNewUserPosted }, set: { _ in })) {
-						Button("New Location added!!!") {
-							dismiss()
+						get: { studentVM.wasNewUserPosted }, set: {_ in })) {
+							Button("New Location added!!!") {
+								dismiss()
+							}
 						}
-					}
 				}
 				.padding()
 				.alert("Error posting new location", isPresented: Binding<Bool>(
-				get: { studentVM.showPostError }, set: { _ in })) {
-					Button("Dismiss") {}
-				}
+					get: { studentVM.showPostError }, set: { _ in })) {
+						Button("Dismiss") {}
+					}
 			}
+			.onAppear { studentVM.getRandomUserInformation() }
 			.alert("No location found", isPresented: $noLocationFound) {
 				Button("Dismiss") {}
 			}
 		}
-		.alert(studentVM.showOverrideLocationMessage, isPresented: $overrideMap) {
-			Button("Dismiss") {
-				overrideMap = false
-				mapVM.studentLocations.removeLast()
-			}
-			Button("Override") {
-				print("Override Location")
-				storeNewLocation(override: State<Bool>(initialValue: overrideMap))
-				presentMap = true
-				
-			}
-		}
-		.onAppear { studentVM.getRandomUserInformation() }
 	}
 	
 	//MARK: - Helper function
 	private func validateForm() -> Bool {
-		return isValidFirstName && isValidLastName && isValidCity && isValidCity && isValidStreet && isValidUrl
+		return isValidAddress && isValidUrl
 	}
 	
-	private func storeNewLocation(override: State<Bool>){
-		presentMap = false
-		fullAddress = "\(country), \(city), \(street)"
+	private func storeNewLocation(){
+		studentVM.showPostError = false
 		let geocoder = CLGeocoder()
-		geocoder.geocodeAddressString(fullAddress) {placemarks, error in
+		geocoder.geocodeAddressString(address) { placemarks, error in
 			if let _ = error {
 				noLocationFound = true
 			} else {
@@ -165,31 +125,13 @@ struct StudentView: View {
 					noLocationFound = false
 					let coordinate = location.coordinate
 					
-					// check if the user wants to override the last location
-					if override.wrappedValue {
-						mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: studentVM.firstName, lastName: studentVM.lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
-
-						presentMap = true
-						
-					} else {
-						
-						let alreadyPostedLocation = mapVM.studentLocations.filter { loc in
-							loc.coordinate.latitude == coordinate.latitude && loc.coordinate.longitude == coordinate.longitude
-						}
+					mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: studentVM.firstName, lastName: studentVM.lastName, mapString: address, mediaURL: mediaUrl, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
 					
-						if !alreadyPostedLocation.isEmpty {
-							overrideMap = true
-						} else {
-							mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: studentVM.firstName, lastName: studentVM.lastName, mapString: fullAddress, mediaURL: url, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
-							
-							presentMap = true
-						}
-					}
+					presentMap = true
 					
 				} else {
 					noLocationFound = true
 					presentMap = false
-					overrideMap = false
 				}
 			}
 		}

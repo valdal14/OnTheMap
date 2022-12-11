@@ -9,7 +9,10 @@ import SwiftUI
 
 struct HeaderView: View {
 	
+	let showOverrideLocationMessage = "You already placed a pin on the Map. Would you like to override?"
+	@State private var overrideMap = false
 	@State private var showingStudentView = false
+	@State private var showingStudentUpdateView = false
 	@EnvironmentObject var mapVM : MapViewModel
 	@StateObject var headerVM = HeaderViewModel()
 	
@@ -29,10 +32,17 @@ struct HeaderView: View {
 			Spacer()
 			
 			Button {
-				showingStudentView.toggle()
+				if !headerVM.checkIfTheCurrentUserAlreadyPostLocation() {
+					overrideMap = true
+				} else {
+					showingStudentView.toggle()
+				}
 			} label: {
 				Label("", systemImage: "mappin")
 			}
+			.sheet(isPresented: $showingStudentUpdateView, content: {
+				UpdateStudentView()
+			})
 			.sheet(isPresented: $showingStudentView) {
 				StudentView()
 			}
@@ -49,6 +59,12 @@ struct HeaderView: View {
 				headerVM.showLogoutError = false
 			}
 		}
+		.alert(showOverrideLocationMessage, isPresented: $overrideMap) {
+				Button("Override") {
+					showingStudentUpdateView.toggle()
+				}
+				Button("Cancel") {}
+			}
 		.padding()
     }
 }

@@ -19,7 +19,6 @@ struct MapView: View {
 					StudentAnnotationView(firstName: loc.firstName, LastName: loc.lastName, url: loc.mediaURL)
 				}
 			}
-		
 	}
 }
 

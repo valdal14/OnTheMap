@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		010CD60E2934A2FA0012F8DE /* CurrentMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010CD60D2934A2FA0012F8DE /* CurrentMapView.swift */; };
+		0129377A2944705D00D5DA87 /* UpdateStudentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012937792944705D00D5DA87 /* UpdateStudentView.swift */; };
+		0129377C2944707100D5DA87 /* UpdateStudentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129377B2944707100D5DA87 /* UpdateStudentViewModel.swift */; };
 		014DAB74292A7C73007D8D78 /* ButtonLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014DAB73292A7C73007D8D78 /* ButtonLoginView.swift */; };
 		014DAB76292A7D1E007D8D78 /* LinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014DAB75292A7D1E007D8D78 /* LinkView.swift */; };
 		014DAB78292A7EA1007D8D78 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014DAB77292A7EA1007D8D78 /* Login.swift */; };
@@ -38,6 +40,8 @@
 
 /* Begin PBXFileReference section */
 		010CD60D2934A2FA0012F8DE /* CurrentMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentMapView.swift; sourceTree = "<group>"; };
+		012937792944705D00D5DA87 /* UpdateStudentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateStudentView.swift; sourceTree = "<group>"; };
+		0129377B2944707100D5DA87 /* UpdateStudentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateStudentViewModel.swift; sourceTree = "<group>"; };
 		014DAB73292A7C73007D8D78 /* ButtonLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLoginView.swift; sourceTree = "<group>"; };
 		014DAB75292A7D1E007D8D78 /* LinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkView.swift; sourceTree = "<group>"; };
 		014DAB77292A7EA1007D8D78 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
@@ -160,6 +164,7 @@
 				01E606E82930AFCC0081FFE5 /* StudentView.swift */,
 				010CD60D2934A2FA0012F8DE /* CurrentMapView.swift */,
 				01B5102229373608002F0E4A /* SearchButtonView.swift */,
+				012937792944705D00D5DA87 /* UpdateStudentView.swift */,
 			);
 			path = StudentView;
 			sourceTree = "<group>";
@@ -184,6 +189,7 @@
 				0152F305292D29F90011F7BB /* MapViewModel.swift */,
 				01F231AA2931053B00BC2D27 /* StudentViewModel.swift */,
 				01CB93A2293F3F6A00803ED6 /* HeaderViewModel.swift */,
+				0129377B2944707100D5DA87 /* UpdateStudentViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -283,6 +289,7 @@
 				01B5102329373608002F0E4A /* SearchButtonView.swift in Sources */,
 				01CB93A7293F4C7400803ED6 /* StudentInformation.swift in Sources */,
 				01CB93A1293F3C1200803ED6 /* Logout.swift in Sources */,
+				0129377A2944705D00D5DA87 /* UpdateStudentView.swift in Sources */,
 				01CB93A3293F3F6A00803ED6 /* HeaderViewModel.swift in Sources */,
 				01AE8E93292CB209005A5264 /* MainView.swift in Sources */,
 				014DAB7C292A88ED007D8D78 /* LoginHeader.swift in Sources */,
@@ -290,6 +297,7 @@
 				010CD60E2934A2FA0012F8DE /* CurrentMapView.swift in Sources */,
 				014DAB78292A7EA1007D8D78 /* Login.swift in Sources */,
 				014DAB7A292A80A9007D8D78 /* Network.swift in Sources */,
+				0129377C2944707100D5DA87 /* UpdateStudentViewModel.swift in Sources */,
 				0184E0B0293213A90067A812 /* OnTheMap+Extension.swift in Sources */,
 				017770CE293BC202001FA9D6 /* StudentAnnotationView.swift in Sources */,
 				014DAB7E292A8F78007D8D78 /* LoginViewModel.swift in Sources */,

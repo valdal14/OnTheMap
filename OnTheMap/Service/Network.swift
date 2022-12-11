@@ -14,6 +14,7 @@ class Network {
 	struct Authentication {
 		static var accountKey = ""
 		static var sessionId = ""
+		static var objectId = ""
 	}
 	
 	enum Endpoint {
@@ -30,7 +31,7 @@ class Network {
 				case .login: return Endpoint.udacityBaseURL + "session"
 				case .studentLocation: return Endpoint.udacityBaseURL + "StudentLocation?order=-updatedAt&limit=100"
 				case .addLocation: return Endpoint.udacityBaseURL + "StudentLocation"
-				case .updateLocation: return Endpoint.udacityBaseURL + "StudentLocation" + Authentication.sessionId
+				case .updateLocation: return Endpoint.udacityBaseURL + "StudentLocation/" + Authentication.objectId
 				case .getRandomUser: return Endpoint.udacityBaseURL + "users/3903878747"
 			}
 		}
@@ -208,7 +209,8 @@ class Network {
 		case 200:
 			let decodedData = try? JSONDecoder().decode(StudentResponse.self, from: data)
 			
-			if let _ = decodedData {
+			if let decodedData = decodedData {
+				Authentication.objectId = decodedData.objectId
 				return true
 			} else {
 				throw NetworkError.decodingError
@@ -222,10 +224,10 @@ class Network {
 		}
 	}
 	
-	func updateUser(firstName: String, lastName: String, latitude: Double, longitude: Double, mapString: String, mediaURL: String) async throws -> Bool {
+	func updateUser(createdAt: String, firstName: String, lastName: String, latitude: Double, longitude: Double, mapString: String, mediaURL: String, uniqueKey: String) async throws -> Bool {
 		guard let url = Endpoint.updateLocation.url else { throw NetworkError.badURL }
 		
-		let studentToPost = Student(createdAt: Date().formatted(), firstName: firstName, lastName: lastName, latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, uniqueKey: UUID().uuidString)
+		let studentToPost = Student(createdAt: createdAt, firstName: firstName, lastName: lastName, latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, uniqueKey: uniqueKey)
 		
 		var req = URLRequest(url: url)
 		req.httpMethod = "PUT"

@@ -23,4 +23,8 @@ class HeaderViewModel: ObservableObject {
 			}
 		}
 	}
+	
+	func checkIfTheCurrentUserAlreadyPostLocation() -> Bool {
+		return Network.Authentication.objectId.isEmpty
+	}
 }

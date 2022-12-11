@@ -17,31 +17,30 @@ struct MainView: View {
 	var body: some View {
 		VStack {
 			HeaderView()
-			Spacer()
-			VStack {
-				if mapVM.locationRequestCompled {
-					TabView {
-						MapView()
-							.tabItem {
-								Label("Map", systemImage: "mappin.square.fill")
-							}
-						
-						ListView()
-							.tabItem {
-								Label("Map", systemImage: "list.bullet.rectangle.fill")
-							}
-					}
-				} else {
-					ProgressView()
+
+			if mapVM.locationRequestCompled {
+				TabView {
+					MapView()
+						.tabItem {
+							Label("Map", systemImage: "mappin.square.fill")
+						}
+					
+					ListView()
+						.tabItem {
+							Label("Map", systemImage: "list.bullet.rectangle.fill")
+						}
 				}
+			} else {
+				ProgressView()
 			}
-			.alert(mapVM.networkError, isPresented: Binding<Bool>(
-				get: { mapVM.showStudentError }, set: {_ in })
-			) {
-				Button("Please try again", role: .cancel) {
-					mapVM.showStudentError = false
-					backToLogin = true
-				}
+			Spacer()
+		}
+		.alert(mapVM.networkError, isPresented: Binding<Bool>(
+			get: { mapVM.showStudentError }, set: {_ in })
+		) {
+			Button("Please try again", role: .cancel) {
+				mapVM.showStudentError = false
+				backToLogin = true
 			}
 		}
 		.fullScreenCover(isPresented: $backToLogin) {
