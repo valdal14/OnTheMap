@@ -18,6 +18,7 @@ struct StudentView: View {
 	@State private var mediaUrl = ""
 	@State private var presentMap = false
 	@State private var noLocationFound = false
+	@State private var isLoadingLocation = false
 	@EnvironmentObject var mapVM : MapViewModel
 	
 	//MARK: - Validation States
@@ -37,6 +38,12 @@ struct StudentView: View {
 					Text("Fill the form to search a new location")
 					Text("URL and Address are mandatory")
 						.fontWeight(.ultraLight)
+					if isLoadingLocation {
+						Text("Loading new location, please wait")
+							.padding()
+						ProgressView()
+							.padding()
+					}
 				}
 				Form {
 					Section {
@@ -68,11 +75,11 @@ struct StudentView: View {
 						}
 					}
 				}
-				
 				HStack {
 					
 					SearchButtonView(systemImageName: "magnifyingglass", isValidForm: (isValidAddress && isValidUrl)) {
 						hideKeyboard()
+						isLoadingLocation = true
 						storeNewLocation()
 					}
 					
@@ -127,6 +134,7 @@ struct StudentView: View {
 					
 					mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: studentVM.firstName, lastName: studentVM.lastName, mapString: address, mediaURL: mediaUrl, uniqueKey: UUID().uuidString, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
 					
+					isLoadingLocation = false
 					presentMap = true
 					
 				} else {

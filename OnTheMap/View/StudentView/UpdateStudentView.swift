@@ -20,6 +20,7 @@ struct UpdateStudentView: View {
 	@State private var presentMap = false
 	@State private var allowUpdate = false
 	@State private var icon = ""
+	@State private var isLoadingLocation = false
 	
 	//MARK: - Validation States
 	@State private var isValidUrl = false
@@ -34,6 +35,12 @@ struct UpdateStudentView: View {
 			Text("Fill the form to search a new location")
 			Text("URL and Address are mandatory")
 				.fontWeight(.ultraLight)
+			if isLoadingLocation {
+				Text("Loading new location, please wait")
+					.padding()
+				ProgressView()
+					.padding()
+			}
 		}
 		Form {
 			Section {
@@ -69,6 +76,7 @@ struct UpdateStudentView: View {
 			
 			SearchButtonView(systemImageName: "magnifyingglass", isValidForm: (isValidAddress)) {
 				hideKeyboard()
+				isLoadingLocation = true
 				updateNewLocation()
 			}
 			.alert("OnTheMap", isPresented: Binding<Bool>(
@@ -114,6 +122,7 @@ struct UpdateStudentView: View {
 					let lastEntry = mapVM.studentLocations.removeLast()
 					mapVM.studentLocations.append(StudentLocation(createdAt: Date().formatted(), firstName: lastEntry.firstName, lastName: lastEntry.lastName, mapString: address, mediaURL: mediaUrl, uniqueKey: lastEntry.uniqueKey, coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)))
 					
+					isLoadingLocation = false
 					presentMap = true
 					
 					studentVM.updateStudentInformation(createdAt: Date().formatted(), uniqueKey: mapVM.studentLocations.last!.uniqueKey, firstName: mapVM.studentLocations.last!.firstName, lastName: mapVM.studentLocations.last!.lastName, latitude: coordinate.latitude, longitude: coordinate.longitude, address: address, mediaURL: mediaUrl)

@@ -27,7 +27,7 @@ struct LinkView: View {
 					.frame(maxWidth: .infinity, alignment: .center)
 			} else {
 				Image(systemName: loginVM.wifiImageName)
-					.foregroundColor(Color("UdacityColor"))
+					.foregroundColor(.red)
 					.frame(width: 50, height: 50, alignment: .center)
 				Text(loginVM.wifiNetworkDescription)
 					.fontWeight(.ultraLight)

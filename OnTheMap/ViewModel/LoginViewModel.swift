@@ -28,7 +28,9 @@ class LoginViewModel: ObservableObject {
 	
 	init(){
 		monitor.pathUpdateHandler = { path in
-			self.isInternetAvailable = path.status == .satisfied
+			DispatchQueue.main.async {
+				self.isInternetAvailable = path.status == .satisfied
+			}
 		}
 		
 		monitor.start(queue: queue)
