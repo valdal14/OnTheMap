@@ -10,6 +10,7 @@ import SwiftUI
 struct ListView: View {
 	
 	@EnvironmentObject var mapVM : MapViewModel
+	@StateObject var loginVM = LoginViewModel()
 	
 	var body: some View {
 		List(mapVM.studentLocations.sorted(by: { $0.createdAt > $1.createdAt })) { location in
@@ -17,7 +18,15 @@ struct ListView: View {
 				Image(systemName: "mappin")
 					.fontWeight(.bold)
 					.foregroundColor(Color("UdacityColor"))
-				Link("\(location.firstName) \(location.lastName)", destination: URL(string: location.mediaURL)!)
+				if loginVM.isInternetAvailable {
+					Link("\(location.firstName) \(location.lastName)", destination: URL(string: location.mediaURL)!)
+				} else {
+					Text("\(location.firstName) \(location.lastName)")
+					Spacer()
+					Image(systemName: loginVM.wifiImageName)
+						.foregroundColor(.red)
+						.frame(width: 50, height: 50, alignment: .center)
+				}
 			}
 		}
 	}
